@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('./partials/head');  %> 
+    </head>
+
+    <%- include('./partials/nav', { title: 'Home' });  %> 
+
+    <div class="container">
+        <div class="row deep-orange-text">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field">
+                        <i class="material-icons prefix">account_circle</i>
+                        <input id="username" type="text">
+                        <label for="username">Username</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field">
+                        <i class="material-icons prefix">email</i>
+                        <input id="email" type="email">
+                        <label for="email">Email</label>
+                    </div>
+                </div>
+                <div class="row" onclick="passwordFocus()">
+                    <div class="input-field" id="password-container" onclick="passwordFocus()">
+                        <i class="material-icons prefix">lock</i>
+                        <input id="password" type="password">
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <a class="waves-effect waves-light btn deep-orange" onclick="signUp()">Sign Up</a>
+                </div>
+                <div class="row">
+                    <a href="login.html"><p class="flow-text deep-orange-text">Already have an account? Click here to log in</p></a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('./partials/foot');  %> 
+    <script>M.AutoInit();</script>
+</html>

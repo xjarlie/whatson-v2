@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <%- include('./partials/head')  %> 
+        <%- include('./partials/head');  %> 
     </head>
 
-    <%- include('./partials/foot')  %> 
+    <%- include('./partials/nav', { title: 'Home' });  %> 
+
+    
+
+    <%- include('./partials/foot');  %> 
+    <script>M.AutoInit();</script>
 </html>
