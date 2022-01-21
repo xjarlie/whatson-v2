@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <%- include('./partials/head');  %> 
+        <link rel="stylesheet" href="/public/css/signup.css" />
     </head>
 
     <%- include('./partials/nav', { title: 'Home' });  %> 
@@ -23,8 +24,8 @@
                         <label for="email">Email</label>
                     </div>
                 </div>
-                <div class="row" onclick="passwordFocus()">
-                    <div class="input-field" id="password-container" onclick="passwordFocus()">
+                <div class="row">
+                    <div class="input-field" id="password-container">
                         <i class="material-icons prefix">lock</i>
                         <input id="password" type="password">
                         <label for="password">Password</label>
