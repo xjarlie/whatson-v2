@@ -32,6 +32,13 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="input-field" id="password2-container">
+                        <i class="material-icons prefix">lock</i>
+                        <input id="password2" type="password">
+                        <label for="password2">Re-enter password</label>
+                    </div>
+                </div>
+                <div class="row">
                     <a class="waves-effect waves-light btn deep-orange" onclick="signUp()">Sign Up</a>
                 </div>
                 <div class="row">
@@ -41,6 +48,62 @@
         </div>
     </div>
 
-    <%- include('./partials/foot');  %> 
-    <script>M.AutoInit();</script>
+    <%- include('./partials/foot');  %>
+    <script>
+        M.AutoInit();
+
+        async function signUp() {
+            const username = document.querySelector('#username').value.trim(),
+                    email = document.querySelector('#email').value.trim(),
+                    password = document.querySelector('#password').value.trim(),
+                    password2 = document.querySelector('#password2').value.trim();
+
+            // Check that all values are present
+            if (!(username && email && password && password2)) {
+                alert('Please fill out all fields.');
+                return false;
+            }
+
+            // Validate email
+            const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if (!regex.test(email)) {
+                alert('Please enter a valid email.');
+                return false;
+            }
+            
+            // Validate passwords
+            if (password !== password2) {
+                alert('Passwords do not match.');
+                document.querySelector('#password2').value = '';
+                document.querySelector('#password2').focus();
+                return false;
+            }
+
+
+            const data = { username, email, password };
+            const url = '/api/auth/signup';
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            const status = await response.status;
+            const json = await response.json();
+            switch (status) {
+                case 201:
+                    console.log('Success: ', json.result);
+                    break;
+                case 422:
+                    console.log('Exists: ', json.error);
+                    break;
+                default:
+                    console.log('Unknown: ', json);
+                    break;
+            }
+
+        }
+        
+    </script>
 </html>

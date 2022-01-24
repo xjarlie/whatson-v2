@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 
 const indexRouter = require('./routes/index');
 const appRouter = require('./routes/app');
+const authRouter = require('./routes/auth');
 // const usersRouter = require('./routes/users');
 // const postsRouter = require('./routes/posts');
 
@@ -20,6 +21,7 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/app', appRouter);
+app.use('/api/auth', authRouter);
 // app.use('/api/users', usersRouter);
 // app.use('/api/posts', postsRouter);
 
