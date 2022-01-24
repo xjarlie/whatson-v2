@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <a class="waves-effect waves-light btn deep-orange" onclick="signUp()">Sign Up</a>
+                    <a class="waves-effect waves-light btn deep-orange" onclick="signUp()" style="width: 100%;">Sign Up</a>
                 </div>
                 <div class="row">
                     <a href="login.html"><p class="flow-text deep-orange-text">Already have an account? Click here to log in</p></a>
@@ -97,12 +97,13 @@
                     break;
                 case 422:
                     console.log('Exists: ', json.error);
+                    alert(json.error);
                     break;
                 default:
-                    console.log('Unknown: ', json);
+                    console.log('Unknown: ', json.error);
+                    alert(json.error);
                     break;
             }
-
         }
         
     </script>
