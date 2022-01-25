@@ -4,7 +4,7 @@
             <% if (!locals.hideMenu) { %>
                 <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
             <% } %>
-            <a href="#" class="brand-logo"><%= title %> </a>
+            <a href="#" class="brand-logo"><%= title %></a>
             <ul id="nav-mobile"class="right">
                 <li><a onclick="refresh()"><i class="material-icons">refresh</i></a></li>
             </ul>
@@ -15,11 +15,10 @@
     <ul id="slide-out" class="sidenav" id="sidenav">
         <li><div class="user-view">
             <div class="background">
-                <img src="img/orange.png" id="sidebar-img">
+                <img src="/public/img/orange.png" id="sidebar-img">
             </div>
     
-            <a href="/app/profile"><span class="white-text name " id="username-nav">Username loading...</span></a>
-            <a href="/app/profile"><span class="white-text email" id="email-nav">Email loading...</span></a>
+            <a href="/app/profile"><span class="white-text name " id="username-nav"><%= locals.username %> </span></a>
         </div></li>
         <li><a href="/app" class="waves-effect darkmode-text" ><i class="material-icons darkmode-text">home</i>Home</a></li>
         <li><a href="/app/friends" class="waves-effect darkmode-text" ><i class="material-icons darkmode-text" >groups</i>Friends</a></li>

@@ -58,7 +58,7 @@ function hashData(string, salt) {
     return { hash, salt: salto };
 }
 
-function generateAuthToken(lasts=5184000000 /* 60 days */) {
+function generateAuthToken(lasts=2592000000 /* 30 days */) {
     const tokenData = crypto.randomBytes(64).toString('hex');
     const expires = Date.now() + lasts;
     return { token: tokenData, expires };

@@ -4,7 +4,7 @@ const db = require('../conn');
 
 router.get('/', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
-        res.render('index');
+        res.render('index', { username: req.cookies.USERNAME });
     } else {
         res.redirect('/app/login');
     }
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
 
 router.get('/friends', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
-        res.render('friends');
+        res.render('friends', { username: req.cookies.USERNAME });
     } else {
         res.redirect('/app/login');
     }
@@ -20,7 +20,7 @@ router.get('/friends', async (req, res) => {
 
 router.get('/watchlist', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
-        res.render('watchlist');
+        res.render('watchlist', { username: req.cookies.USERNAME });
     } else {
         res.redirect('/app/login');
     }
