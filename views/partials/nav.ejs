@@ -4,7 +4,12 @@
             <% if (!locals.hideMenu) { %>
                 <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
             <% } %>
-            <a href="#" class="brand-logo"><%= title %></a>
+            <a href="#" class="brand-logo center"><%= title %></a>
+            <% if (locals.showBack) { %>
+                <ul id='nav-mobile' class="left">
+                    <li><a href='#' onclick="window.history.back()"><i class="material-icons">arrow_back</i></a></li>
+                </ul>
+            <% } %>
             <ul id="nav-mobile"class="right">
                 <li><a onclick="refresh()"><i class="material-icons">refresh</i></a></li>
             </ul>
@@ -13,12 +18,13 @@
 </div>
 <% if (!locals.hideMenu) { %>
     <ul id="slide-out" class="sidenav" id="sidenav">
-        <li><div class="user-view">
+        <li><div class="user-view" style="height: 100%;">
             <div class="background">
-                <img src="/public/img/orange.png" id="sidebar-img">
+                <img src="/public/img/orange.png" id="sidebar-img" width="100%" height="100%">
             </div>
     
-            <a href="/app/profile"><span class="white-text name " id="username-nav"><%= locals.username %> </span></a>
+            <a href="/app/profile"><span class="white-text name" id="username-nav"><%= locals.username %> </span></a>
+            <a href=""><span class="white-text email"></span></a>
         </div></li>
         <li><a href="/app" class="waves-effect darkmode-text" ><i class="material-icons darkmode-text">home</i>Home</a></li>
         <li><a href="/app/friends" class="waves-effect darkmode-text" ><i class="material-icons darkmode-text" >groups</i>Friends</a></li>

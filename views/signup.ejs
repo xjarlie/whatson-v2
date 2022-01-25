@@ -79,6 +79,7 @@
                 return false;
             }
 
+            document.querySelector('.btn').classList.add('disabled');
 
             const data = { username, email, password };
             const url = '/api/auth/signup';
@@ -94,14 +95,17 @@
             switch (status) {
                 case 201:
                     console.log('Success: ', json.result);
+                    redirect('/app');
                     break;
                 case 422:
                     console.log('Exists: ', json.error);
                     alert(json.error);
+                    document.querySelector('.btn').classList.remove('disabled');
                     break;
                 default:
                     console.log('Unknown: ', json.error);
                     alert(json.error);
+                    document.querySelector('.btn').classList.remove('disabled');
                     break;
             }
         }

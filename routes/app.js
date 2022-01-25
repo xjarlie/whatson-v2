@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../conn');
+const { checkToken } = require("./checkToken");
 
 router.get('/', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
@@ -42,19 +42,14 @@ router.get('/signup', async (req, res) => {
     }
 });
 
-async function checkToken(givenToken, username) {
-    if (!(givenToken && username)) {
-        return false;
-    }
-    let dbToken = await db.get('auth/users/' + username + '/token');
-    if (!dbToken) {
-        return false;
-    }
-    if (dbToken.expires <= Date.now() || dbToken.token != givenToken) {
-        return false;
+router.get('/create', async (req, res) => {
+    const friends = ['Xjarlie', 'Adele', 'Loui54', 'TJA'];
+
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+        res.render('create', { username: req.cookies.USERNAME, friends: friends });
     } else {
-        return true;
+        res.redirect('/app/login');
     }
-}
+})
 
 module.exports = router;

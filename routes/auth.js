@@ -3,6 +3,8 @@ const router = express.Router();
 const db = require('../conn');
 const crypto = require('crypto');
 
+const cookieOptions = { secure: true, httpOnly: true, maxAge: 5184000000 };
+
 router.post('/signup', async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -29,7 +31,7 @@ router.post('/signup', async (req, res) => {
     await db.set('auth/emails/' + hashData(email, ' ').hash, true);
 
     const safeData = { username, email };
-    res.status(201).cookie('AUTH_TOKEN', token.token).cookie('USERNAME', username).json({ result: safeData });
+    res.status(201).cookie('AUTH_TOKEN', token.token, cookieOptions).cookie('USERNAME', username, cookieOptions).json({ result: safeData });
 });
 
 router.post('/login', async (req, res) => {
@@ -46,7 +48,7 @@ router.post('/login', async (req, res) => {
     if (givenData.hash = userData.password) {
         const token = generateAuthToken();
         await db.set('auth/users/' + username + '/token', token);
-        res.status(200).cookie('AUTH_TOKEN', token.token).cookie('USERNAME', username).json({ result: 'Logged in' });
+        res.status(200).cookie('AUTH_TOKEN', token.token, cookieOptions).cookie('USERNAME', username, cookieOptions).json({ result: 'Logged in' });
     } else {
         res.status(401).json({ error: 'Username or password incorrect' });
     }
