@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="/public/css/signup.css" />
     </head>
 
-    <%- include('./partials/nav', { title: 'Home' });  %> 
+    <%- include('./partials/nav', { title: 'Sign Up', hideMenu: true });  %> 
 
     <div class="container">
         <div class="row deep-orange-text">
@@ -39,10 +39,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <a class="waves-effect waves-light btn deep-orange" onclick="signUp()" style="width: 100%;">Sign Up</a>
+                    <a class="waves-effect waves-light btn deep-orange" onclick="signUp()" style="width: 100%;"><i class='material-icons left'>login</i>Sign Up</a>
                 </div>
                 <div class="row">
-                    <a href="login.html"><p class="flow-text deep-orange-text">Already have an account? Click here to log in</p></a>
+                    <a href="/app/login"><p class="flow-text deep-orange-text">Already have an account? Click here to log in</p></a>
                 </div>
             </form>
         </div>

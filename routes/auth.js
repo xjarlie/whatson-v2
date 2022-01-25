@@ -26,19 +26,29 @@ router.post('/signup', async (req, res) => {
     const data = { username, email, password: hashed.hash, salt: hashed.salt, token };
 
     await db.set('auth/users/' + username, data);
-    await db.set('auth/emails/' + hashData(email, ' '), true);
+    await db.set('auth/emails/' + hashData(email, ' ').hash, true);
 
     const safeData = { username, email };
     res.status(201).cookie('AUTH_TOKEN', token.token).cookie('USERNAME', username).json({ result: safeData });
 });
 
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     const userData = await db.get('auth/users/' + username);
     if (!userData) {
-        res.status(404).json({ error: 'Username incorrect or account does not exist' });
+        res.status(404).json({ error: 'Account with that username does not exist' });
         return false;
+    }
+
+    // Check password
+    const givenData = hashData(username, userData.salt);
+    if (givenData.hash = userData.password) {
+        const token = generateAuthToken();
+        await db.set('auth/users/' + username + '/token', token);
+        res.status(200).cookie('AUTH_TOKEN', token.token).cookie('USERNAME', username).json({ result: 'Logged in' });
+    } else {
+        res.status(401).json({ error: 'Username or password incorrect' });
     }
 });
 

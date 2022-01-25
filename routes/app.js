@@ -47,6 +47,9 @@ async function checkToken(givenToken, username) {
         return false;
     }
     let dbToken = await db.get('auth/users/' + username + '/token');
+    if (!dbToken) {
+        return false;
+    }
     if (dbToken.expires <= Date.now() || dbToken.token != givenToken) {
         return false;
     } else {
