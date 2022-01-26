@@ -44,14 +44,22 @@ router.post('/login', async (req, res) => {
     }
 
     // Check password
-    const givenData = hashData(username, userData.salt);
-    if (givenData.hash = userData.password) {
+    const givenData = hashData(password, userData.salt);
+    if (givenData.hash == userData.password) {
+        console.log(givenData.hash, userData.password);
         const token = generateAuthToken();
         await db.set('auth/users/' + username + '/token', token);
         res.status(200).cookie('AUTH_TOKEN', token.token, cookieOptions).cookie('USERNAME', username, cookieOptions).json({ result: 'Logged in' });
     } else {
         res.status(401).json({ error: 'Username or password incorrect' });
     }
+});
+
+router.get('/test', async (req, res) => {
+    const pwd = 'wasd';
+    const hash = hashData('wasd', 'salt').hash;
+    const userhash = hashData('xjarlie', 'salt').hash;
+    res.send(`${hash}, ${userhash}`);
 });
 
 function hashData(string, salt) {
