@@ -15,6 +15,7 @@ router.post('/create', async (req, res) => {
     }
 
     data.author = username;
+    data.timestamp = Date.now();
 
     let key;
     let exists = true;
@@ -23,6 +24,8 @@ router.post('/create', async (req, res) => {
         const check = await db.get('posts/' + key);
         if (!check) break; 
     }
+
+    data.id = key;
     
     await db.set(`auth/users/${username}/posts/${key}`, key);
     const result = await db.set('posts/' + key, data);

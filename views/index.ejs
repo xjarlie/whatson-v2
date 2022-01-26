@@ -6,7 +6,23 @@
 
     <%- include('./partials/nav', { title: 'Home', username: username });  %> 
 
-    
+    <div class="fixed-action-btn" id="fab">
+        <a class="btn-floating btn-large deep-orange" href="/app/posts/create" id="fabstyle">
+            <i class="large material-icons">mode_edit</i>
+        </a>
+    </div>
+
+    <% for( const i in locals.posts ) { %>
+        <a href="/app/posts/<%= locals.posts[i].id %>">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title" style="font-weight: bold; color: black;"><%= posts[i].title %></span>
+                    <div class="chip"><%= posts[i].category %></div>
+                    <p class="deep-orange-text"><%= posts[i].author %> </p>
+                </div>
+            </div>
+        </a>
+    <% } %>
 
     <%- include('./partials/foot');  %> 
     <script>M.AutoInit();</script>

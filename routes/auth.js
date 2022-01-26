@@ -55,13 +55,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/test', async (req, res) => {
-    const pwd = 'wasd';
-    const hash = hashData('wasd', 'salt').hash;
-    const userhash = hashData('xjarlie', 'salt').hash;
-    res.send(`${hash}, ${userhash}`);
-});
-
 function hashData(string, salt) {
     let salto = salt || crypto.randomBytes(16).toString('hex');
     const hash = crypto.pbkdf2Sync(string, salto, 1000, 64, 'sha512').toString('hex');
