@@ -22,10 +22,10 @@
 .rate > input:checked ~ label {
     color:  #ff5722;    
 }
-.rate:not(:checked) > label:hover,
+/* .rate:not(:checked) > label:hover,
 .rate:not(:checked) > label:hover ~ label {
-    color: #deb217;  
-}
+    color: #deb217;
+} */
 .rate > input:checked + label:hover,
 .rate > input:checked + label:hover ~ label,
 .rate > input:checked ~ label:hover,

@@ -5,31 +5,113 @@
 		<link rel="stylesheet" href="/public/css/create.css" />
     </head>
 
-    <%- include('./partials/nav', { title: 'Post', username: username, hideMenu: true, showBack: true }); %>
+    <%- include('./partials/nav', { title: 'View Post', username: username, hideMenu: true, showBack: true }); %>
 
     <div class="container">
         <div class="row">
             <h4><%= post.title %> </h4>
         </div>
         <div class="row">
-            <div class="chip"><%= post.category %></div>
-        </div>
-        <div class="row">
             <div class="rate">
-                <input type="radio" id="star5" name="rate" value="5" />
-                <label for="star5" title="5 stars">5 stars</label>
-                <input type="radio" id="star4" name="rate" value="4" />
-                <label for="star4" title="4 stars">4 stars</label>
-                <input type="radio" id="star3" name="rate" value="3" />
-                <label for="star3" title="3 stars">3 stars</label>
-                <input type="radio" id="star2" name="rate" value="2" />
-                <label for="star2" title="2 stars">2 stars</label>
-                <input type="radio" id="star1" name="rate" value="1" />
-                <label for="star1" title="1 star">1 star</label>
+                <% for( let i = 5; i > 0; i-- ) { %>
+                    <input type="radio" id="star<%= i %>" name="rate" value="<%= i %>" onclick="stopClick(event)" style="pointer-events: none !important; cursor: default !important;" disabled <% if (post.rating == i) { %>
+                        checked
+                    <% } %>/>
+                    <label for="star<%= i %>" title="<%= i %> stars">5 stars</label>
+                <% } %>
             </div>
         </div>
+        <div class="row">
+            <div class="chip" style="background-color: #ff5722; color: white; font-weight: light; font-size: 1.1em;" onclick="redirect('/app/users/<%= post.author %>')">@<%= post.author %></div>
+        </div>
+        <div class="row">
+            <div class="chip"><%= post.category %></div>
+        </div>
+        <% if (post.genre) { %>
+            <div class="row">
+                <p style="font-weight: bold;">Genre: <%= post.genre %> </p>
+            </div>
+        <% } %>
+        <% if (post.source) { %>
+            <div class="row">
+                <p style="font-weight: bold;">Watched on: <%= post.source %> </p>
+            </div>
+        <% } %>
+        <% if (post.review) { %>
+            <div class="row">
+                <p><%= post.review %> </p>
+            </div>
+        <% } %>
+        <% if (!locals.ownPost) { %>
+            <% if (!locals.onWatchlist) { %> 
+                <div class="row">
+                    <button type="button" class="waves-effect btn deep-orange waves-light" id="watchlistbtn" style="width: 100%;" onclick="addToWatchlist()"><i class="material-icons left">playlist_add</i>Add to watchlist</button>
+                </div>
+            <% } else { %>
+                <div class="row">
+                    <button type="button" class="waves-effect btn deep-orange waves-light" id="watchlistbtn" style="width: 100%;" onclick="removeFromWatchlist()"><i class="material-icons left">remove_circle_outline</i>Remove from watchlist</button>
+                </div>
+            <% } %>
+        <% } else { %>
+            <div class="row">
+                <button type="button" class="waves-effect btn deep-orange waves-light" id="editbtn" style="width: 100%;"><i class="material-icons left">edit</i>Edit post</button>
+            </div>
+            <div class="row">
+                <button type="button" class="waves-effect btn red darken-4 waves-light" id="deletebtn" style="width: 100%;"><i class="material-icons left">delete</i>Delete post</button>
+            </div>
+        <% } %>
+        
     </div>
 
     <%- include('./partials/foot'); %>
+    <script>
+        function stopClick(e) {
+            e.preventDefault();
+        }
+
+        async function addToWatchlist() {
+            const postID = '<%= post.id %>';
+            
+            const url = '/api/users/<%= username %>/watchlist/add';
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postID })
+            });
+            const json = await response.json();
+            const status = await response.status;
+            console.log(status, json);
+            if (status == 201) {
+                M.toast({html: 'Added to watchlist'});
+                document.querySelector('#watchlistbtn').innerHTML = '<i class="material-icons left">remove_circle_outline</i>Remove from watchlist';
+                document.querySelector('#watchlistbtn').onclick = removeFromWatchlist;
+            }
+        }
+
+        async function removeFromWatchlist() {
+            const postID = '<%= post.id %>';
+
+            const url = '/api/users/<%= username %>/watchlist/remove';
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postID })
+            });
+            const json = await response.json();
+            const status = await response.status;
+            console.log(status, json);
+            if (status == 201) {
+                M.toast({html: 'Removed from watchlist'});
+
+                document.querySelector('#watchlistbtn').innerHTML = '<i class="material-icons left">playlist_add</i>Add to watchlist';
+                document.querySelector('#watchlistbtn').onclick = addToWatchlist;
+            }
+        }
+
+    </script>
 
 </html>

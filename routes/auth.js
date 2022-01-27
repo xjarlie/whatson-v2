@@ -55,6 +55,8 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.post('/')
+
 function hashData(string, salt) {
     let salto = salt || crypto.randomBytes(16).toString('hex');
     const hash = crypto.pbkdf2Sync(string, salto, 1000, 64, 'sha512').toString('hex');

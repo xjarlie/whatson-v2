@@ -59,10 +59,12 @@ router.get('/signup', async (req, res) => {
 });
 
 router.get('/posts/create', async (req, res) => {
-    const friends = ['Xjarlie', 'Adele', 'Loui54', 'TJA'];
 
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
-        res.render('create', { username: req.cookies.USERNAME, friends: friends });
+
+        const friendsList = await db.get(`auth/users/${req.cookies.USERNAME}/friends`);
+
+        res.render('create', { username: req.cookies.USERNAME, friends: friendsList });
     } else {
         res.redirect('/app/login');
     }
@@ -77,7 +79,17 @@ router.get('/posts/:id', async (req, res) => {
             // TODO: Make a 404 ejs file
             res.redirect('/app');
         } else {
-            res.render('post', { username: req.cookies.USERNAME, post: data });
+
+            let ownPost = false;
+            let onWatchlist = false;
+            if (data.author == req.cookies.USERNAME) {
+                ownPost = true;
+            }
+
+            onWatchlist = await db.get(`auth/users/${req.cookies.USERNAME}/watchlist/${id}`);
+            
+
+            res.render('post', { username: req.cookies.USERNAME, post: data, ownPost, onWatchlist });
         }
     } else {
         res.redirect('/app/login');
