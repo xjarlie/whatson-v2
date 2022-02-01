@@ -11,7 +11,7 @@ router.post('/:username/watchlist/add', async (req, res) => {
 
             const { postID } = req.body;
 
-            const result = await db.set(`auth/users/${username}/watchlist/${postID}`, postID);
+            const result = await db.set(`auth/users/${username}/watchlist/${postID}`, { id: postID, timestamp: Date.now() });
 
             res.status(201).json({ result, message: 'Added to watchlist: ' + postID });
 
@@ -40,6 +40,6 @@ router.post('/:username/watchlist/remove', async (req, res) => {
     } else {
         res.status(401).json({ error: 'Credentials invalid' });
     }
-})
+});
 
 module.exports = router;

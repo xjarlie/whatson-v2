@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head'); %>
+    </head>
+
+    <body>
+
+    <%- include('./partials/nav', { title: 'Watchlist', username: username }); %>
+
+    <div class="container">
+		<% for( const i in locals.posts ) { %>
+            <div class="card z-depth-1" data-postid="<%= posts[i].id %>">
+                <a
+                    href="/app/posts/<%= posts[i].id %>"
+                    style="color: black; font-weight: bold"
+                >
+                    <div class="card-content">
+                        <span class="card-title" style="font-weight: bold"
+                            ><%= posts[i].title %></span
+                        >
+                        <div class="chip"><%= posts[i].category %></div>
+                        <p class="deep-orange-text" style="width: fit-content">
+                            <%= posts[i].author %>
+                        </p>
+                    </div>
+                    <div class="card-action">
+                        <button class="btn waves-effect deep-orange" type="button" onclick="watched(event, '<%= posts[i].id %>')"><i class="material-icons left">check</i>Recommend</button>
+                        <button class="waves-effect red-text btn-flat" type="button" onclick="removeFromWatchlist(event, '<%= posts[i].id %>')"><i class="material-icons left">delete</i>Remove</button>
+                    </div>
+                </a>
+            </div>
+        <% } %>
+        <div class="row center-align" id="nothing" <%= locals.posts.length == 0 ? '' : 'hidden' %>>
+            <h5>Nothing here</h5>
+            <h6>Add things to your watchlist through the 'Add to watchlist' button on posts</h6>
+        </div>
+    </div>
+
+    <%- include('./partials/foot'); %>
+    <script>
+        M.AutoInit();
+
+        async function removeFromWatchlist(e, id) {
+            e.preventDefault();
+
+            const postID = id;
+
+            const url = '/api/users/<%= username %>/watchlist/remove';
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postID })
+            });
+            const json = await response.json();
+            const status = await response.status;
+            console.log(status, json);
+            if (status == 201) {
+                M.toast({html: 'Removed from watchlist'});
+
+                const card = document.querySelector(`[data-postid="${postID}"]`);
+                card.remove();
+
+                const container = document.querySelector('.container');
+                if (container.childElementCount == 1) {
+                    document.querySelector('#nothing').hidden = false;
+                }
+            }
+        }
+
+        async function watched(e, id) {
+            e.preventDefault();
+
+            await removeFromWatchlist(e, id);
+
+            redirect(`/app/posts/create?id=${id}`);
+        }
+    </script>
+    </body>
+</html>

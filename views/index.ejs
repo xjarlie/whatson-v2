@@ -36,6 +36,10 @@
 			</a>
 		</div>
 		<% } %>
+		<div class="row center-align" id="nothing" <%= locals.posts.length == 0 ? '' : 'hidden' %>>
+			<h5>Nothing here</h5>
+			<h6>Start by creating a post using the pencil button</h6>
+		</div>
 	</div>
 
 	<%- include('./partials/foot'); %>

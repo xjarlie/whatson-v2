@@ -25,7 +25,8 @@
 						</div>
 					</div>
 					<div class="row">
-						<a
+						<button
+							type="button"
 							class="waves-effect waves-light btn deep-orange"
 							onclick="login()"
 							style="width: 100%"
@@ -64,7 +65,6 @@
 				}
 
 				const data = { username, password };
-				console.log(data);
 				const url = "/api/auth/login";
 				const response = await fetch(url, {
 					method: "POST",
