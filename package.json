@@ -4,8 +4,9 @@
   "description": "Nodejs remake of xjarlie/tv-recommend",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "nodemon -e js,ejs,html server.js"
+    "test": "nodemon -e js,ejs,html server.js",
+    "build": "docker build . -t xjarlie/whatson && docker push xjarlie/whatson",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
