@@ -80,8 +80,6 @@ router.get('/posts/create', async (req, res) => {
             prefill.title = await db.get(`posts/${query.id}/title`);
         }
 
-        console.log(prefill);
-
         res.render('create', { username: req.cookies.USERNAME, friends: friendsList, prefill });
     } else {
         res.redirect('/app/login');
