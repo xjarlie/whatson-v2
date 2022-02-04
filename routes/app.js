@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
         let data = await db.orderedList('posts', 'timestamp', 'desc');
         const friendsList = await db.get(`auth/users/${req.cookies.USERNAME}/friends`);
-
+        friendsList[req.cookies.USERNAME] = { username: req.cookies.USERNAME };
         let filtered = [];
         if (friendsList) {
             filtered = _.filter(data, function (o) {
@@ -28,7 +28,11 @@ router.get('/', async (req, res) => {
 
 router.get('/friends', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
-        res.render('friends', { username: req.cookies.USERNAME });
+
+        const friends = await db.orderedList(`auth/users/${req.cookies.USERNAME}/friends`, 'timestamp', 'desc');
+        const requests = await db.orderedList(`auth/users/${req.cookies.USERNAME}/requests`, 'timestamp', 'desc');
+
+        res.render('friends', { username: req.cookies.USERNAME, friends, requests });
     } else {
         res.redirect('/app/login');
     }
@@ -79,8 +83,6 @@ router.get('/posts/create', async (req, res) => {
         if (query.id) {
             prefill.title = await db.get(`posts/${query.id}/title`);
         }
-
-        console.log(prefill);
 
         res.render('create', { username: req.cookies.USERNAME, friends: friendsList, prefill });
     } else {

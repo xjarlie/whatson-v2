@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head'); %>
+    </head>
+    <body>
+
+        <%- include('./partials/nav', { title: 'Friends', username: username }); %>
+
+        <div class="container">
+            <% if (locals.requests.length > 0) { %>
+                <h5>&nbspRequests:</h3>
+                <ul class="collapsible popout">
+                    <% for (const i in requests) { %>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">person</i><%= requests[i].username %> <span class="new badge green" data-badge-caption="Incoming"></span></div>
+                            <div class="collapsible-body">
+                                <button type="button" class="btn red darken-2 waves-effect" style="width: 100%"><i class="material-icons left">remove_circle_outline</i>Ignore</button>
+                                <br />
+                                <br />
+                                <button type="button" class="btn green darken-2 waves-effect" style="width: 100%;"><i class="material-icons left">person_add_alt_1</i>Accept</button>
+                            </div>
+                        </li>
+                    <% } %>
+                </ul>
+            <% } %>
+            <% if (locals.friends.length > 0) { %>
+                <h5>&nbspFriends:</h5>
+                <ul class="collapsible popout">
+                    <% for (const i in friends) { %>
+                        <li>
+                            <div class="collapsible-header" onclick="redirect('/app/users/<%= friends[i].username %>')"><i class="material-icons">person</i><%= friends[i].username %></div>
+                        </li>
+                    <% } %>
+                </ul>
+            <% } %>
+        </div>
+
+        <%- include('./partials/foot') %>
+        <script>
+            M.AutoInit();
+        </script>
+    </body>
+</html>
