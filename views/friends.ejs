@@ -7,15 +7,26 @@
 
         <%- include('./partials/nav', { title: 'Friends', username: username }); %>
 
+        <div class="fixed-action-btn" id="fab">
+            <a
+                class="btn-floating btn-large deep-orange"
+                href="/app/friends/add"
+                id="fabstyle"
+            >
+                <i class="large material-icons">add</i>
+            </a>
+        </div>
+    
+
         <div class="container">
             <% if (locals.requests.length > 0) { %>
-                <h5>&nbspRequests:</h3>
-                <ul class="collapsible popout">
+                <h5>Requests:</h3>
+                <ul class="collapsible" id="requestsCollapsible">
                     <% for (const i in requests) { %>
-                        <li>
+                        <li data-id="<%= requests[i].username %>">
                             <div class="collapsible-header"><i class="material-icons">person</i><%= requests[i].username %> <span class="new badge green" data-badge-caption="Incoming"></span></div>
                             <div class="collapsible-body">
-                                <button type="button" class="btn red darken-2 waves-effect" style="width: 100%"><i class="material-icons left">remove_circle_outline</i>Ignore</button>
+                                <button type="button" class="btn red darken-2 waves-effect" style="width: 100%" onclick="ignore('<%= requests[i].username %>')"><i class="material-icons left">remove_circle_outline</i>Ignore</button>
                                 <br />
                                 <br />
                                 <button type="button" class="btn green darken-2 waves-effect" style="width: 100%;"><i class="material-icons left">person_add_alt_1</i>Accept</button>
@@ -23,10 +34,12 @@
                         </li>
                     <% } %>
                 </ul>
+                <% if (locals.friends.length > 0) { %>
+                    <h5>Friends:</h5>
+                <% } %>
             <% } %>
             <% if (locals.friends.length > 0) { %>
-                <h5>&nbspFriends:</h5>
-                <ul class="collapsible popout">
+                <ul class="collapsible">
                     <% for (const i in friends) { %>
                         <li>
                             <div class="collapsible-header" onclick="redirect('/app/users/<%= friends[i].username %>')"><i class="material-icons">person</i><%= friends[i].username %></div>
@@ -39,6 +52,12 @@
         <%- include('./partials/foot') %>
         <script>
             M.AutoInit();
+
+            const reqCollapse = document.querySelector('#requestsCollapsible');
+            if (reqCollapse) {
+                M.Collapsible.getInstance(reqCollapse).open(0);
+            }
+
         </script>
     </body>
 </html>

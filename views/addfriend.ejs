@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head'); %>
+    </head>
+
+    <body>
+
+        <%- include('./partials/nav', { title: 'Add Friend', username: username, hideMenu: true, showBack: true, customBack: 'redirect("/app/friends")' }); %>
+        
+
+        <%- include('./partials/foot') %>
+    </body>
+</html>

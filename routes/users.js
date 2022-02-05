@@ -42,4 +42,23 @@ router.post('/:username/watchlist/remove', async (req, res) => {
     }
 });
 
+router.post('/:username/requests/remove', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+        const { username } = req.params;
+        if (username == req.cookies.USERNAME) {
+
+            const { request } = req.body;
+
+            const result = await db.remove(`auth/users/${username}/requests/${request}`);
+
+            res.status(201).json({ result, message: 'Removed request: ' + request });
+
+        } else {
+            res.status(401).json({ error: 'Credentials incorrect' });
+        }
+    } else {
+        res.status(401).json({ error: 'Credentials invalid' });
+    }
+});
+
 module.exports = router;

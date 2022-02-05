@@ -7,7 +7,7 @@
             <a href="#" class="brand-logo center"><%= title %></a>
             <% if (locals.showBack) { %>
                 <ul id='nav-mobile' class="left">
-                    <li><a href='#' onclick="window.history.back()"><i class="material-icons">arrow_back</i></a></li>
+                    <li><a href='#' onclick=<%= locals.customBack ? customBack : 'window.history.back()' %>><i class="material-icons">arrow_back</i></a></li>
                 </ul>
             <% } %>
             <ul id="nav-mobile"class="right">

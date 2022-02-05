@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
         let data = await db.orderedList('posts', 'timestamp', 'desc');
-        const friendsList = await db.get(`auth/users/${req.cookies.USERNAME}/friends`);
+        const friendsList = await db.get(`auth/users/${req.cookies.USERNAME}/friends`) || {};
         friendsList[req.cookies.USERNAME] = { username: req.cookies.USERNAME };
         let filtered = [];
         if (friendsList) {
@@ -33,6 +33,20 @@ router.get('/friends', async (req, res) => {
         const requests = await db.orderedList(`auth/users/${req.cookies.USERNAME}/requests`, 'timestamp', 'desc');
 
         res.render('friends', { username: req.cookies.USERNAME, friends, requests });
+    } else {
+        res.redirect('/app/login');
+    }
+});
+
+router.get('/friends/add', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+
+        const friends = await db.orderedList(`auth/users/${req.cookies.USERNAME}/friends`, 'timestamp', 'desc');
+        const requests = await db.orderedList(`auth/users/${req.cookies.USERNAME}/requests`, 'timestamp', 'desc');
+
+
+
+        res.render('addfriend', { username: req.cookies.USERNAME, friends, requests });
     } else {
         res.redirect('/app/login');
     }

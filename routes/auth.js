@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../conn');
 const crypto = require('crypto');
+const _ = require('lodash');
 
 const cookieOptions = { secure: true, httpOnly: true, maxAge: 5184000000 };
 
@@ -11,14 +12,19 @@ router.post('/signup', async (req, res) => {
     const hashed = hashData(password);
 
     const usernameCheck = await db.get('auth/users/' + username);
-    const emailCheck = await db.get('auth/emails/' + hashData(email, ' '));
+
+    // Email check
+    const users = await db.orderedList('auth/users', 'username', 'asc');
+    const emailExists = _.filter(users, (o) => {
+        return o.email === email;
+    });
     
     if (usernameCheck) {
         res.status(422).json({ error: 'Username already in use' });
         return false;
     }
 
-    if (emailCheck) {
+    if (emailExists.length > 0) {
         res.status(422).json({ error: 'Email already in use' });
         return false;
     }
