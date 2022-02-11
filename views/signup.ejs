@@ -12,6 +12,13 @@
             <form class="col s12">
                 <div class="row">
                     <div class="input-field">
+                        <i class="material-icons prefix">face</i>
+                        <input id="displayName" type="text">
+                        <label for="displayName">Display Name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field">
                         <i class="material-icons prefix">account_circle</i>
                         <input id="username" type="text">
                         <label for="username">Username</label>
@@ -56,10 +63,11 @@
             const username = document.querySelector('#username').value.trim(),
                     email = document.querySelector('#email').value.trim(),
                     password = document.querySelector('#password').value.trim(),
-                    password2 = document.querySelector('#password2').value.trim();
+                    password2 = document.querySelector('#password2').value.trim(),
+                    displayName = document.querySelector('#displayName').value.trim();
 
             // Check that all values are present
-            if (!(username && email && password && password2)) {
+            if (!(username && email && password && password2 && displayName)) {
                 alert('Please fill out all fields.');
                 return false;
             }
@@ -81,7 +89,7 @@
 
             document.querySelector('.btn').classList.add('disabled');
 
-            const data = { username, email, password };
+            const data = { username, email, password, displayName };
             const url = '/api/auth/signup';
             const response = await fetch(url, {
                 method: 'POST',

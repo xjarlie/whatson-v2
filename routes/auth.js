@@ -7,7 +7,7 @@ const _ = require('lodash');
 const cookieOptions = { secure: true, httpOnly: true, maxAge: 5184000000 };
 
 router.post('/signup', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, displayName } = req.body;
 
     const hashed = hashData(password);
 
@@ -31,7 +31,7 @@ router.post('/signup', async (req, res) => {
 
     const token = generateAuthToken();
 
-    const data = { username, email, password: hashed.hash, salt: hashed.salt, token };
+    const data = { username, displayName, email, password: hashed.hash, salt: hashed.salt, token };
 
     await db.set('auth/users/' + username, data);
     await db.set('auth/emails/' + hashData(email, ' ').hash, true);
