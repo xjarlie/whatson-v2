@@ -4,6 +4,20 @@ const db = require('../conn');
 const crypto = require('crypto');
 const { checkToken } = require("./checkToken");
 
+router.get('/search/:username', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+
+        const { username } = req.params;
+        
+        const user = await db.get('auth/users/' + username);
+
+        res.status(200).json({ result: user });
+
+    } else {
+        res.status(401).json({ error: 'Credentials invalid' });
+    }
+});
+
 router.post('/:username/watchlist/add', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
         const { username } = req.params;
