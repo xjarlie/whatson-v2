@@ -130,4 +130,44 @@ router.get('/posts/:id', async (req, res) => {
 
 });
 
+router.get('/users/:username', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+
+        const username = req.cookies.USERNAME;
+        const { username: pageUsername } = req.params;
+
+        if (username === pageUsername) {
+            res.render('profile', { user: await getUserInfo(username) });
+            return true;
+        }
+
+        // Check friend status
+        const isFriend = await db.get(`auth/users/${username}/friends/${pageUsername}`)? true : false;
+
+        // get userdata
+        const pageUser = await db.get(`auth/users/${pageUsername}`);
+        const cleanPageUser = { username: pageUser.username, displayName: pageUser.displayName, imgUrl: pageUser.imgUrl };
+
+        let data = { isFriend, pageUser: cleanPageUser, user: await getUserInfo(username) };
+
+        if (isFriend) {
+
+            // retrieve full posts
+            const posts = await db.orderedList(`auth/users/${pageUsername}/posts`, 'timestamp', 'desc');
+            let detailedPosts = [];
+            for (const i in posts) {
+                const post = await db.get(`posts/${posts[i]}`);
+                detailedPosts[i] = post;
+            }
+            data.posts = detailedPosts;
+
+        }
+
+        res.render('user', data);
+
+    } else {
+        res.redirect('/app/login');
+    }
+});
+
 module.exports = router;

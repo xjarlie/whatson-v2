@@ -26,12 +26,10 @@
         </div>
         <div class="row">
             <div class="chip"><%= post.category %></div>
+            <% if (post.genre) { %>
+                <div class="chip"><%= post.genre %></div>
+            <% } %>
         </div>
-        <% if (post.genre) { %>
-            <div class="row">
-                <p style="font-weight: bold;">Genre: <%= post.genre %> </p>
-            </div>
-        <% } %>
         <% if (post.source) { %>
             <div class="row">
                 <p style="font-weight: bold;">Watched on: <%= post.source %> </p>

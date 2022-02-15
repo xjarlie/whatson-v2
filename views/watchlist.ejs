@@ -19,7 +19,10 @@
                         <span class="card-title" style="font-weight: bold"
                             ><%= posts[i].title %></span
                         >
-                        <div class="chip"><%= posts[i].category %></div>
+                        <div class="chip deep-orange white-text"><%= posts[i].category %></div>
+                        <% if (posts[i].genre) { %>
+                            <div class="chip"><%= posts[i].genre %></div>
+                        <% } %>
                         <p class="deep-orange-text" style="width: fit-content">
                             <%= posts[i].author %>
                         </p>
