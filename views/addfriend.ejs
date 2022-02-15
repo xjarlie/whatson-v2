@@ -19,6 +19,13 @@
             <div class="row">
                 <button type="button" class="btn deep-orange" style="width: 100%;" onclick="searchUser()"><i class="material-icons left">search</i>Search</button>
             </div>
+            <hr />
+            <div class="row">
+                <div class="card" id="user-display" hidden>
+                    <span class="card-title" id="card-displayname">Charlie Appleton</span>
+                    <p id="card-username"></p>
+                </div>
+            </div>
         </div>
 
         <%- include('./partials/foot') %>
@@ -33,6 +40,10 @@
                 const json = await response.json();
 
                 console.log(status, json);
+
+                if (status == 200) {
+                    
+                }
             }
         </script>
     </body>

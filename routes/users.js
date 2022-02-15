@@ -11,7 +11,13 @@ router.get('/search/:username', async (req, res) => {
         
         const user = await db.get('auth/users/' + username);
 
-        res.status(200).json({ result: user });
+        if (user) {
+            const cleanedUser = { username: user.username, displayName: user.displayName };
+            res.status(200).json({ result: cleanedUser });
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+
 
     } else {
         res.status(401).json({ error: 'Credentials invalid' });
