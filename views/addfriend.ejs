@@ -13,22 +13,98 @@
 			<div class="row">
 				<div class="input-field">
 					<i class="material-icons prefix">search</i>
-					<input
-						id="search-box"
-						type="text"
-						placeholder="Enter a username to search"
-					/>
-					<label for="search-box">Search</label>
+					<input id="search-box" type="text" />
+					<label for="search-box">Search Username</label>
+				</div>
+			</div>
+			<div class="row">
+				<button
+					type="button"
+					class="btn deep-orange waves-effect waves-light"
+					style="width: 100%"
+					onclick="searchUser()"
+				>
+					<i class="material-icons left">search</i>Search
+				</button>
+			</div>
+			<hr />
+			<div class="row">
+				<div class="card" id="user-display" hidden>
+					<div class="card-content" style="font-weight: bold">
+						<span
+							class="card-title"
+							id="card-displayname"
+							style="font-weight: bold"
+							>Charlie Appleton</span
+						>
+						<p id="card-username"></p>
+					</div>
+					<div class="card-action">
+						<button
+							type="button"
+							class="btn green darken-2 waves-effect waves-light"
+							id="send-btn"
+							style="width: 100%"
+						>
+							<i class="material-icons left">person_add_alt_1</i> Send Friend
+							Request
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
-
-		<%- include('./partials/foot') %>
-		<script src="https://unpkg.com/lunr/lunr.js"></script>
+		5 <%- include('./partials/foot') %>
 		<script>
 			M.AutoInit();
 
-            
+			async function searchUser() {
+				const userToSearch = document.querySelector("#search-box").value.trim();
+
+				const response = await fetch(`/api/users/search/${userToSearch}`);
+				const status = await response.status;
+				const json = await response.json();
+
+				console.log(status, json);
+
+				if (status == 200) {
+					document.querySelector("#user-display").removeAttribute("hidden");
+					document.querySelector("#card-displayname").textContent =
+						json.result.displayName;
+					document.querySelector("#card-username").textContent =
+						json.result.username;
+
+					document.querySelector("#send-btn").onclick = async () => {
+                        const url = '/api/users/requests/send';
+						const result = await fetch(url, {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({ request: userToSearch }),
+						});
+						const status = await result.status;
+						const json = await result.json();
+						console.log(status, json);
+
+						if (status == 201) {
+							M.toast({ html: "Friend request sent" });
+							document
+								.querySelector("#user-display")
+								.setAttribute("hidden", "true");
+                            document.querySelector("#search-box").value = "";
+
+						} else {
+                            alert(json.error);
+                        }
+					};
+				} else if (status == 404) {
+					document
+						.querySelector("#user-display")
+						.setAttribute("hidden", "true");
+					alert("User not found");
+					document.querySelector("#search-box").value = "";
+				}
+			}
 		</script>
 	</body>
 </html>
