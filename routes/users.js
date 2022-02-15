@@ -62,6 +62,28 @@ router.post('/:username/watchlist/remove', async (req, res) => {
     }
 });
 
+router.post('/requests/send', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+
+        const { request } = req.body;
+        const username = req.cookies.USERNAME;
+
+        // Check if already friends
+        {
+            const result = await db.get(`auth/users/${username}/friends/${request}`);
+            if (result) {
+                res.status(400).json({ error: 'User already in friends list' });
+            }
+        }
+
+        const result = await db.set(`auth/users/${request}/requests/${username}`, { username, timestamp: Date.now() });
+
+        res.status(201).json({ result, message: 'Friend request sent: ' + request });
+    } else {
+        res.status(401).json({ error: 'Credentials invalid' });
+    }
+})
+
 router.post('/:username/requests/add', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
@@ -75,6 +97,7 @@ router.post('/:username/requests/add', async (req, res) => {
 
             // Add friend
             const result = await db.set(`auth/users/${username}/friends/${request}`, { username: request, timestamp: Date.now() });
+            const result2 = await db.set(`auth/users/${request}/friends/${username}`, { username: username, timestamp: Date.now() })
 
             res.status(201).json({ result, message: 'Accepted request: ' + request });
         } else {
