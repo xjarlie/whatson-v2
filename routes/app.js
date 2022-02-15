@@ -44,14 +44,7 @@ router.get('/friends/add', async (req, res) => {
         const friends = await db.orderedList(`auth/users/${req.cookies.USERNAME}/friends`, 'timestamp', 'desc');
         const requests = await db.orderedList(`auth/users/${req.cookies.USERNAME}/requests`, 'timestamp', 'desc');
 
-        const users = await db.orderedList(`auth/users`, 'username', 'asc');
-        const cleanedUsers = users.map((user) => {
-            return { username: user.username, displayName: user.displayName };
-        });
-
-        console.log(cleanedUsers);
-
-        res.render('addfriend', { username: req.cookies.USERNAME, friends, requests, users: cleanedUsers });
+        res.render('addfriend', { username: req.cookies.USERNAME, friends, requests });
     } else {
         res.redirect('/app/login');
     }

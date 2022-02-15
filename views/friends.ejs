@@ -107,7 +107,8 @@
 
                 if (status == 201) {
                     reload();
-
+                } else { 
+                    alert(`Error ${status}: ${json.error}`);
                 }
 
             }
