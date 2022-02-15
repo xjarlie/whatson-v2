@@ -6,7 +6,7 @@
 
     <body>
 
-    <%- include('./partials/nav', { title: 'Watchlist', username: username }); %>
+    <%- include('./partials/nav', { title: 'Watchlist', user: user }); %>
 
     <div class="container">
 		<% for( const i in locals.posts ) { %>
@@ -46,7 +46,7 @@
 
             const postID = id;
 
-            const url = '/api/users/<%= username %>/watchlist/remove';
+            const url = '/api/users/<%= user.username %>/watchlist/remove';
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {

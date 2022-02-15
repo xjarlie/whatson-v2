@@ -3,6 +3,7 @@ const db = require('../conn');
 const router = express.Router();
 const { checkToken } = require("./checkToken");
 const _ = require('lodash');
+const { getUserInfo } = require("./getUserInfo");
 
 router.get('/', async (req, res) => {
 
@@ -20,7 +21,7 @@ router.get('/', async (req, res) => {
             });
         }
 
-        res.render('index', { username: req.cookies.USERNAME, posts: filtered });
+        res.render('index', { user: await getUserInfo(req.cookies.USERNAME), posts: filtered });
     } else {
         res.redirect('/app/login');
     }
@@ -32,7 +33,7 @@ router.get('/friends', async (req, res) => {
         const friends = await db.orderedList(`auth/users/${req.cookies.USERNAME}/friends`, 'timestamp', 'desc');
         const requests = await db.orderedList(`auth/users/${req.cookies.USERNAME}/requests`, 'timestamp', 'desc');
 
-        res.render('friends', { username: req.cookies.USERNAME, friends, requests });
+        res.render('friends', { user: await getUserInfo(req.cookies.USERNAME), friends, requests });
     } else {
         res.redirect('/app/login');
     }
@@ -44,7 +45,7 @@ router.get('/friends/add', async (req, res) => {
         const friends = await db.orderedList(`auth/users/${req.cookies.USERNAME}/friends`, 'timestamp', 'desc');
         const requests = await db.orderedList(`auth/users/${req.cookies.USERNAME}/requests`, 'timestamp', 'desc');
 
-        res.render('addfriend', { username: req.cookies.USERNAME, friends, requests });
+        res.render('addfriend', { user: await getUserInfo(req.cookies.USERNAME), friends, requests });
     } else {
         res.redirect('/app/login');
     }
@@ -62,7 +63,7 @@ router.get('/watchlist', async (req, res) => {
             posts[i] = await db.get(`posts/${sorted[i].id}`);
         }
 
-        res.render('watchlist', { username: req.cookies.USERNAME, posts });
+        res.render('watchlist', { user: await getUserInfo(req.cookies.USERNAME), posts });
     } else {
         res.redirect('/app/login');
     }
@@ -96,7 +97,7 @@ router.get('/posts/create', async (req, res) => {
             prefill.title = await db.get(`posts/${query.id}/title`);
         }
 
-        res.render('create', { username: req.cookies.USERNAME, friends: friendsList, prefill });
+        res.render('create', { user: await getUserInfo(req.cookies.USERNAME), friends: friendsList, prefill });
     } else {
         res.redirect('/app/login');
     }
@@ -121,7 +122,7 @@ router.get('/posts/:id', async (req, res) => {
             onWatchlist = await db.get(`auth/users/${req.cookies.USERNAME}/watchlist/${id}`);
             
 
-            res.render('post', { username: req.cookies.USERNAME, post: data, ownPost, onWatchlist });
+            res.render('post', { user: await getUserInfo(req.cookies.USERNAME), post: data, ownPost, onWatchlist });
         }
     } else {
         res.redirect('/app/login');

@@ -5,7 +5,7 @@
     </head>
     <body>
 
-        <%- include('./partials/nav', { title: 'Friends', username: username }); %>
+        <%- include('./partials/nav', { title: 'Friends', user: user }); %>
 
         <div class="fixed-action-btn" id="fab">
             <a
@@ -67,7 +67,7 @@
 
             async function ignore(request) {
                 
-                const url = '/api/users/<%= username %>/requests/remove';
+                const url = '/api/users/<%= user.username %>/requests/remove';
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: {
@@ -91,7 +91,7 @@
 
             async function accept(request) {
 
-                const url = '/api/users/<%= username %>/requests/add';
+                const url = '/api/users/<%= user.username %>/requests/add';
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: {

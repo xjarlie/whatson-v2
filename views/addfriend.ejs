@@ -5,7 +5,7 @@
 	</head>
 
 	<body>
-		<%- include('./partials/nav', { title: 'Add Friend', username: username,
+		<%- include('./partials/nav', { title: 'Add Friend', user: user,
 		hideMenu: true, showBack: true, customBack: 'redirect("/app/friends")' });
 		%>
 
@@ -88,10 +88,8 @@
 
 						if (status == 201) {
 							M.toast({ html: "Friend request sent" });
-							document
-								.querySelector("#user-display")
-								.setAttribute("hidden", "true");
                             document.querySelector("#search-box").value = "";
+							document.querySelector('#send-btn').classList.add('disabled');
 
 						} else {
                             alert(json.error);

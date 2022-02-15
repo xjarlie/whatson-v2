@@ -5,7 +5,7 @@
 		<link rel="stylesheet" href="/public/css/create.css" />
     </head>
 
-    <%- include('./partials/nav', { title: 'View Post', username: username, hideMenu: true, showBack: true }); %>
+    <%- include('./partials/nav', { title: 'View Post', user: user, hideMenu: true, showBack: true }); %>
 
     <div class="container" style="max-width: 800px;">
         <div class="row">
@@ -72,7 +72,7 @@
         async function addToWatchlist() {
             const postID = '<%= post.id %>';
             
-            const url = '/api/users/<%= username %>/watchlist/add';
+            const url = '/api/users/<%= user.username %>/watchlist/add';
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -93,7 +93,7 @@
         async function removeFromWatchlist() {
             const postID = '<%= post.id %>';
 
-            const url = '/api/users/<%= username %>/watchlist/remove';
+            const url = '/api/users/<%= user.username %>/watchlist/remove';
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
