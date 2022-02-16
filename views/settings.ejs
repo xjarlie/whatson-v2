@@ -10,15 +10,31 @@
 			<div class="row">
                 <div class="card switch">
                     <div class="card-content">
-                        <span class="card-title">
+                        <span class="card-title" style="font-weight: 500;">
                             Dark Mode
                             <div class="right">
                                 <label>       
-                                    <input type="checkbox" id="darkmode" onclick="darkMode()">
+                                    <input type="checkbox" id="darkmode" onclick="darkMode()" <%= user.darkMode? 'checked' : '' %>>
                                     <span class="lever"></span>
                                 </label>
                             </div>
                         </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <h6><i class="material-icons left">face</i><%= locals.user.displayName %></h6>
+                        </div>
+                        <div class="row">
+                            <h6><i class="material-icons left">account_circle</i><%= locals.user.username %></h6>
+                        </div>
+                        <div class="row">
+                            <h6><i class="material-icons left">email</i><%= locals.user.email %></h6>
+                        </div>
+                        <button type="button" class="btn waves-effect waves-light red darken-2" onclick="logOut()" style="width: 100%;"><i class="material-icons left">logout</i>Log Out</button>
                     </div>
                 </div>
             </div>
@@ -27,6 +43,28 @@
 		<%- include('./partials/foot') %>
 		<script>
 			M.AutoInit();
+
+            async function darkMode() {
+                const checkbox = document.querySelector('#darkmode');
+                console.log(checkbox.checked);
+
+                const response = await fetch(`/api/users/darkmode`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ darkMode: checkbox.checked })
+                });
+                const status = await response.status;
+                const json = await response.json();
+                console.log(status, json);
+
+                if (status == 200) {
+                    reload();
+                } else {
+                    alert('Error: ' + json.error);
+                }
+            }
 		</script>
 	</body>
 </html>

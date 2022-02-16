@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <%- include('./partials/head');  %> 
+        <%- include('./partials/head', { user: { darkMode: false } });  %> 
         <link rel="stylesheet" href="/public/css/signup.css" />
     </head>
 
-    <%- include('./partials/nav', { title: 'Sign Up', hideMenu: true });  %> 
+    <%- include('./partials/nav', { title: 'Sign Up', hideMenu: true, user: { darkMode: false } });  %> 
 
     <div class="container">
         <div class="row deep-orange-text">

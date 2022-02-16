@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<%- include('./partials/head'); %>
+        <%- include('./partials/head', { user: { darkMode: false } });  %> 
 		<link rel="stylesheet" href="/public/css/signup.css" />
 	</head>
+
 	<body>
-		<%- include('./partials/nav', { title: 'Log In', hideMenu: true }); %>
+		<%- include('./partials/nav', { title: 'Log In', hideMenu: true, user: { darkMode: false } }); %>
 
 		<div class="container">
 			<div class="row deep-orange-text">

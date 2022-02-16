@@ -55,7 +55,8 @@ body {
 
 .list-item,
 .collapsible-header,
-.collapsible {
+.collapsible,
+.collapsible-body {
     background-color: #292929 !important;
     border-color: #101010;
 }

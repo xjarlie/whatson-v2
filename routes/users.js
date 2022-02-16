@@ -131,4 +131,21 @@ router.post('/:username/requests/remove', async (req, res) => {
     }
 });
 
+router.post('/darkmode', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+
+        const username = req.cookies.USERNAME;
+        const { darkMode } = req.body;
+
+        console.log(username, darkMode);
+
+        const result = await db.set(`auth/users/${username}/darkMode`, darkMode);
+    
+
+        res.status(200).json({ result, message: 'Dark mode preferences updated' });
+    } else {
+        res.status(401).json({ error: 'Credentials invalid' });
+    }
+})
+
 module.exports = router;

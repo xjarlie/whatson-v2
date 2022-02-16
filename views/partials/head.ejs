@@ -4,8 +4,10 @@
 <link rel="stylesheet" href="/public/materialize.min.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+<% if (locals.user) { %>
 <% if (locals.user.darkMode) { %>
 <link rel="stylesheet" href="/public/css/darkmode.css" />
+<% } %>
 <% } %>
 
 <meta name="theme-color" content="#ff5722" />

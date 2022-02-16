@@ -1,58 +1,87 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <%- include('./partials/head'); %>
-    </head>
+	<head>
+		<%- include('./partials/head'); %>
+	</head>
 
-    <body>
-        <%- include('./partials/nav', { title: 'User', user: user, hideMenu: true, showBack: true }); %>
+	<body>
+		<%- include('./partials/nav', { title: 'User', user: user, hideMenu: true,
+		showBack: true }); %>
 
-        <div class="container">
-            
-            <h4 class="center-align" style="font-weight: 500;"><%= pageUser.displayName %></h4>
-            <div class="row center-align">
-                <div class="chip deep-orange white-text center-align">@<%= pageUser.username %></div>
-            </div>
+		<div class="container">
+			<h4 class="center-align" style="font-weight: 500">
+				<%= pageUser.displayName %>
+			</h4>
+			<div class="row center-align">
+				<div class="chip deep-orange white-text center-align">
+					@<%= pageUser.username %>
+				</div>
+			</div>
 
-            <hr />
+			<hr />
 
-            <% if (locals.isFriend) { %>
+			<% if (locals.isFriend) { %> <% for (const i in locals.posts) { %>
+			<div class="card z-depth-1">
+				<a
+					href="/app/posts/<%= locals.posts[i].id %>"
+					style="color: black; font-weight: bold"
+				>
+					<div class="card-content">
+						<span class="card-title" style="font-weight: bold"
+							><%= posts[i].title %></span
+						>
+						<div class="chip deep-orange white-text">
+							<%= posts[i].category %>
+						</div>
+						<% if (posts[i].genre) { %>
+                            <div class="chip"><%= posts[i].genre %></div>
+                        <% } %>
+					</div>
+				</a>
+			</div>
+			<% } %> <% if (locals.posts.length == 0) { %>
 
-                <% for  (const i in locals.posts) { %>
-                    <div class="card z-depth-1">
-                        <a
-                            href="/app/posts/<%= locals.posts[i].id %>"
-                            style="color: black; font-weight: bold"
-                        >
-                            <div class="card-content">
-                                <span class="card-title" style="font-weight: bold"
-                                    ><%= posts[i].title %></span
-                                >
-                                <div class="chip deep-orange white-text"><%= posts[i].category %></div>
-                                <div class="chip"><%= posts[i].genre %></div>
-                            </div>
-                        </a>
-                    </div>
-                <% } %>
+			<h5 class="center-align">No posts yet</h5>
 
-                <% if (locals.posts.length == 0) { %>
-                    
-                    <h5 class="center-align">No posts yet</h5>
+			<% } %> <% } else { %>
 
-                <% } %>
+			<button
+				class="btn deep-orange waves-effect waves-light"
+				type="button"
+				onclick="addFriend()"
+				style="width: 100%"
+			>
+				<i class="material-icons left">person_add_alt_1</i>Add Friend
+			</button>
 
-            <% } else { %>
+			<% } %>
+		</div>
 
-                <button class="btn deep-orange waves-effect waves-light" type="button" onclick="addFriend()" style="width: 100%;"><i class="material-icons left">person_add_alt_1</i>Add Friend</button>
+		<%- include('./partials/foot'); %>
+		<script>
+			M.AutoInit();
 
-            <% } %>
+			async function addFriend() {
+				const url = "/api/users/requests/send";
+				const result = await fetch(url, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ request: userToSearch }),
+				});
+				const status = await result.status;
+				const json = await result.json();
+				console.log(status, json);
 
-        </div>
-
-        <%- include('./partials/foot'); %>
-        <script>
-            M.AutoInit();
-        </script>
-    </body>
-
+				if (status == 201) {
+					M.toast({ html: "Friend request sent" });
+					document.querySelector("#search-box").value = "";
+					document.querySelector("#send-btn").classList.add("disabled");
+				} else {
+					alert(json.error);
+				}
+			}
+		</script>
+	</body>
 </html>

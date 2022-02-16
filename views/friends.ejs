@@ -24,12 +24,12 @@
                 <ul class="collapsible requestsSection" id="requestsCollapsible">
                     <% for (const i in requests) { %>
                         <li data-requestid="<%= requests[i].username %>" class="list-item">
-                            <div class="collapsible-header waves-effect"><i class="material-icons">person</i><%= requests[i].username %> <span class="new badge green" data-badge-caption="Incoming"></span></div>
+                            <div class="collapsible-header waves-effect waves-light"><i class="material-icons">person</i><%= requests[i].username %> <span class="new badge green" data-badge-caption="Incoming"></span></div>
                             <div class="collapsible-body">
-                                <button type="button" class="btn red darken-2 waves-effect" style="width: 100%" onclick="ignore('<%= requests[i].username %>')"><i class="material-icons left">remove_circle_outline</i>Ignore</button>
+                                <button type="button" class="btn red darken-2 waves-effect waves-light" style="width: 100%" onclick="ignore('<%= requests[i].username %>')"><i class="material-icons left">remove_circle_outline</i>Ignore</button>
                                 <br />
                                 <br />
-                                <button type="button" class="btn green darken-2 waves-effect" style="width: 100%;" onclick="accept('<%= requests[i].username %>')"><i class="material-icons left">person_add_alt_1</i>Accept</button>
+                                <button type="button" class="btn green darken-2 waves-effect waves-light" style="width: 100%;" onclick="accept('<%= requests[i].username %>')"><i class="material-icons left">person_add_alt_1</i>Accept</button>
                             </div>
                         </li>
                     <% } %>

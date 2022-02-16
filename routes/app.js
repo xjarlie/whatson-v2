@@ -168,6 +168,8 @@ router.get('/users/:username', async (req, res) => {
 
         }
 
+        console.log(data);
+
         res.render('user', data);
 
     } else {
