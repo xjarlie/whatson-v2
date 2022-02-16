@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<%- include('./partials/head'); %>
+	</head>
+	<body>
+		<%- include('./partials/nav', { title: 'Settings', user: user }); %>
+
+		<div class="container">
+			<div class="row">
+                <div class="card switch">
+                    <div class="card-content">
+                        <span class="card-title">
+                            Dark Mode
+                            <div class="right">
+                                <label>       
+                                    <input type="checkbox" id="darkmode" onclick="darkMode()">
+                                    <span class="lever"></span>
+                                </label>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+		</div>
+
+		<%- include('./partials/foot') %>
+		<script>
+			M.AutoInit();
+		</script>
+	</body>
+</html>

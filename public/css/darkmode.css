@@ -1,0 +1,61 @@
+body {
+    background-color: #121212;
+}
+
+.card {
+    background-color: #292929;
+}
+
+.chip {
+    background-color: #101010;
+}
+
+.deep-orange {
+    background-color: #ff7043 !important;
+}
+
+.deep-orange-text {
+    color: #ff7043 !important;
+}
+
+/* text */
+*, .chip {
+    color: #e7e7e7;
+}
+
+#nav {
+    background-color: #292929 !important;
+}
+
+.rate > input:checked ~ label {
+    color:  #ff7043;    
+}
+
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #ff7043;
+}
+
+#slide-out {
+    background-color: #292929;
+    color: #e7e7e7;
+}
+
+#slide-out li a,
+#slide-out li i {
+    color: #e7e7e7;
+}
+
+#slide-out-bg {
+    background-color: #ff7043 !important;
+}
+
+.list-item,
+.collapsible-header,
+.collapsible {
+    background-color: #292929 !important;
+    border-color: #101010;
+}

@@ -13,8 +13,10 @@ router.get('/search/:username', async (req, res) => {
         if (user) {
             const cleanedUser = { username: user.username, displayName: user.displayName };
             res.status(200).json({ result: cleanedUser });
+            return true;
         } else {
             res.status(404).json({ error: 'User not found' });
+            return true;
         }
 
 
@@ -72,14 +74,17 @@ router.post('/requests/send', async (req, res) => {
             const result = await db.get(`auth/users/${username}/friends/${request}`);
             if (result) {
                 res.status(400).json({ error: 'User already in friends list' });
+                return true;
             }
         }
 
         const result = await db.set(`auth/users/${request}/requests/${username}`, { username, timestamp: Date.now() });
 
         res.status(201).json({ result, message: 'Friend request sent: ' + request });
+        return true;
     } else {
         res.status(401).json({ error: 'Credentials invalid' });
+        return true;
     }
 })
 

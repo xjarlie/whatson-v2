@@ -23,7 +23,7 @@
                 <h5 id="requestsH">Requests:</h5>
                 <ul class="collapsible requestsSection" id="requestsCollapsible">
                     <% for (const i in requests) { %>
-                        <li data-requestid="<%= requests[i].username %>">
+                        <li data-requestid="<%= requests[i].username %>" class="list-item">
                             <div class="collapsible-header waves-effect"><i class="material-icons">person</i><%= requests[i].username %> <span class="new badge green" data-badge-caption="Incoming"></span></div>
                             <div class="collapsible-body">
                                 <button type="button" class="btn red darken-2 waves-effect" style="width: 100%" onclick="ignore('<%= requests[i].username %>')"><i class="material-icons left">remove_circle_outline</i>Ignore</button>
@@ -41,7 +41,7 @@
             <% if (locals.friends.length > 0) { %>
                 <ul class="collapsible">
                     <% for (const i in friends) { %>
-                        <li>
+                        <li class="list-item">
                             <div class="collapsible-header" onclick="redirect('/app/users/<%= friends[i].username %>')"><i class="material-icons">person</i><%= friends[i].username %></div>
                         </li>
                     <% } %>
