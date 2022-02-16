@@ -67,6 +67,7 @@
 				console.log(status, json);
 
 				if (status == 200) {
+					document.querySelector('#send-btn').classList.remove('disabled');
 					document.querySelector("#user-display").removeAttribute("hidden");
 					document.querySelector("#card-displayname").textContent =
 						json.result.displayName;

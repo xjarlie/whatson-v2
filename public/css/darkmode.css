@@ -60,3 +60,7 @@ body {
     background-color: #292929 !important;
     border-color: #101010;
 }
+
+.dropdown-content {
+    background-color: #292929 !important;
+}

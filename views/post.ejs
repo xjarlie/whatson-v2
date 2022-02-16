@@ -8,6 +8,9 @@
     <%- include('./partials/nav', { title: 'View Post', user: user, hideMenu: true, showBack: true }); %>
 
     <div class="container" style="max-width: 800px;">
+        <% if (post.people) {  if (post.people.includes(user.username)) { %>
+            <span class="new badge right deep-orange" data-badge-caption="Recommended to you"></span>
+        <% }} %>
         <div class="row">
             <h4><%= post.title %> </h4>
         </div>

@@ -21,6 +21,8 @@ router.get('/', async (req, res) => {
             });
         }
 
+        console.log(filtered);
+
         res.render('index', { user: await getUserInfo(req.cookies.USERNAME), posts: filtered });
     } else {
         res.redirect('/app/login');
@@ -158,17 +160,17 @@ router.get('/users/:username', async (req, res) => {
         if (isFriend) {
 
             // retrieve full posts
-            const posts = await db.orderedList(`auth/users/${pageUsername}/posts`, 'timestamp', 'desc');
+            const posts = await db.get(`auth/users/${pageUsername}/posts`);
             let detailedPosts = [];
+            let o = 0;
             for (const i in posts) {
                 const post = await db.get(`posts/${posts[i]}`);
-                detailedPosts[i] = post;
+                detailedPosts[o] = post;
+                o++;
             }
-            data.posts = detailedPosts;
-
+            data.posts = _.orderBy(detailedPosts, ['timestamp'], ['desc']);;
+            console.log('USERPOSTS', data.posts);
         }
-
-        console.log(data);
 
         res.render('user', data);
 
@@ -185,6 +187,16 @@ router.get('/settings', async (req, res) => {
     } else {
         res.redirect('/app/login');
     }
-})
+});
+
+router.get('/logout', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+
+        res.clearCookie('AUTH_TOKEN').clearCookie('USERNAME').redirect('/app/login');
+
+    } else {
+        res.redirect('/app/login');
+    }
+});
 
 module.exports = router;

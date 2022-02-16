@@ -25,9 +25,13 @@
 				style="color: black; font-weight: bold"
 			>
 				<div class="card-content">
+					<% if (locals.posts[i].people) {  if (locals.posts[i].people.includes(user.username)) { %>
+						<span class="new badge right deep-orange" data-badge-caption="Recommended to you"></span>
+					<% }} %>
 					<span class="card-title" style="font-weight: bold"
 						><%= posts[i].title %></span
 					>
+
 					<div class="chip deep-orange white-text"><%= posts[i].category %></div>
 					<% if (posts[i].genre) { %>
 						<div class="chip"><%= posts[i].genre %></div>
