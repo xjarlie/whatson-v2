@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<%- include('./partials/head'); %>
+	</head>
+	<body>
+		<%- include('./partials/nav', { title: 'Error', user: user, hideMenu: true,
+		showBack: true }); %>
+
+        <div class="container center-align">
+            <h4>Error 404: Page not found</h4>
+            <div class="row"></div>
+            <button type="button" class="btn deep-orange waves-effect waves-light" onclick="redirect('/app')" style="width: 100%;"><i class="material-icons left">home</i> Go Home</button>
+        </div>        
+
+        <%- include('./partials/foot') %>
+    </body>
+</html>

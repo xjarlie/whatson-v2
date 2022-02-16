@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../conn');
-const crypto = require('crypto');
 const { checkToken } = require("./checkToken");
 
 router.get('/search/:username', async (req, res) => {

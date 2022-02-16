@@ -136,6 +136,7 @@ router.get('/users/:username', async (req, res) => {
         const username = req.cookies.USERNAME;
         const { username: pageUsername } = req.params;
 
+
         if (username === pageUsername) {
             res.render('profile', { user: await getUserInfo(username) });
             return true;
@@ -146,6 +147,10 @@ router.get('/users/:username', async (req, res) => {
 
         // get userdata
         const pageUser = await db.get(`auth/users/${pageUsername}`);
+        if (!pageUser) {
+            res.render('404', { user: await getUserInfo(username) });
+            return true;
+        }
         const cleanPageUser = { username: pageUser.username, displayName: pageUser.displayName, imgUrl: pageUser.imgUrl };
 
         let data = { isFriend, pageUser: cleanPageUser, user: await getUserInfo(username) };
