@@ -111,8 +111,8 @@ router.get('/posts/:id', async (req, res) => {
         const data = await db.get('posts/' + id);
 
         if (!data) {
-            // TODO: Make a 404 ejs file
-            res.redirect('/app');
+            res.render('404');
+            return true;
         } else {
 
             let ownPost = false;
@@ -131,6 +131,28 @@ router.get('/posts/:id', async (req, res) => {
     }
 
 });
+
+router.get('/posts/:id/edit', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USENAME)) {
+
+        const { id } = req.params;
+        const data = await db.get('posts/' + id);
+
+        if (!data) {
+            res.render('404');
+            return true;
+        }
+
+        if (data.author == req.cookies.USERNAME) {
+            res.render('edit', { user: await getUserInfo(req.cookies.USERNAME), post: data });
+        } else {
+            res.redirect('/app/posts/' + id);
+        }
+
+    } else {
+        res.redirect('/app/login');
+    }
+})
 
 router.get('/users/:username', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
