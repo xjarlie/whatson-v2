@@ -55,10 +55,10 @@
             <% } %>
         <% } else { %>
             <div class="row">
-                <button type="button" class="waves-effect btn deep-orange waves-light" id="editbtn" style="width: 100%;"><i class="material-icons left">edit</i>Edit post</button>
+                <button type="button" class="waves-effect btn deep-orange waves-light" id="editbtn" style="width: 100%;" onclick="redirect('/app/posts/<%= post.id %>/edit')"><i class="material-icons left">edit</i>Edit post</button>
             </div>
             <div class="row">
-                <button type="button" class="waves-effect btn red darken-4 waves-light" id="deletebtn" style="width: 100%;"><i class="material-icons left">delete</i>Delete post</button>
+                <button type="button" class="waves-effect btn red darken-4 waves-light" id="deletebtn" style="width: 100%;" onclick="deletePost()" ><i class="material-icons left">delete</i>Delete post</button>
             </div>
         <% } %>
         
@@ -110,6 +110,26 @@
 
                 document.querySelector('#watchlistbtn').innerHTML = '<i class="material-icons left">playlist_add</i>Add to watchlist';
                 document.querySelector('#watchlistbtn').onclick = addToWatchlist;
+            }
+        }
+
+        async function deletePost() {
+
+            const response = await fetch('/api/posts/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postID: '<%= post.id %>' })
+            });
+            const status = await response.status;
+            const json = await response.json();
+            console.log(status, json);
+
+            if (status === 201) {
+                redirect('/app');
+            } else {
+                alert(json.error);
             }
         }
 

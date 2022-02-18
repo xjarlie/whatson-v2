@@ -122,6 +122,12 @@
         usernameInput.oninput = (e) => {
             usernameInput.value = usernameInput.value.toLowerCase();
         }
+
+        document.querySelector('#password2').onkeypress = (e) => {
+			if (e.keyCode == 13) {
+				signUp();
+			}
+		}
         
     </script>
 </html>

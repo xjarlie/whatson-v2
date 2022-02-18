@@ -76,7 +76,7 @@
 				});
 				const status = await response.status;
 				const json = await response.json();
-				console.log(status);
+				console.log(status, json);
 				switch (status) {
 					case 200:
 						console.log("Success: ", json.result);
@@ -101,6 +101,12 @@
 			const usernameInput = document.querySelector('#username');
         	usernameInput.oninput = (e) => {
             	usernameInput.value = usernameInput.value.toLowerCase();
+			}
+
+			document.querySelector('#password').onkeypress = (e) => {
+				if (e.keyCode == 13) {
+					login();
+				}
 			}
 
 		</script>

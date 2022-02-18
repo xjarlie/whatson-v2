@@ -32,4 +32,51 @@ router.post('/create', async (req, res) => {
     res.status(201).json({ message: 'Post posted', result: result });
 });
 
+router.post('/update', async (req, res) => {
+    const post = req.body;
+    
+    if (!await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+        res.status(401).json({ error: 'Authentication invalid, please log in again'});
+        return false;
+    }
+
+    if (!await db.get(`auth/users/${req.cookies.USERNAME}/posts/${post.id}`)) {
+        res.status(401).json({ error: 'Credentials invalid' });
+        return false;
+    }
+
+
+    const prevData = await db.get(`posts/${post.id}`);
+    console.log('PREVIOUS:', prevData);
+
+    const newData = Object.assign(prevData, post);
+
+    console.log('NEW:', newData);
+
+    const result = await db.set(`posts/${post.id}`, newData);
+    res.status(201).json({ message: 'Post updated', result });
+
+});
+
+router.post('/delete', async (req, res) => {
+
+    const { postID } = req.body;
+
+    if (!await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+        res.status(401).json({ error: 'Authentication invalid, please log in again'});
+        return false;
+    }
+
+    if (!await db.get(`auth/users/${req.cookies.USERNAME}/posts/${postID}`)) {
+        res.status(401).json({ error: 'Credentials invalid' });
+        return false;
+    }
+    
+    const result = await db.remove(`posts/${postID}`);
+    const resultUser = await db.remove(`auth/users/${req.cookies.USERNAME}/posts/${postID}`);
+
+    res.status(201).json({ message: 'Post deleted', result });
+    return true;
+});
+
 module.exports = router;

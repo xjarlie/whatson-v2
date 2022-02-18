@@ -21,8 +21,6 @@ router.get('/', async (req, res) => {
             });
         }
 
-        console.log(filtered);
-
         res.render('index', { user: await getUserInfo(req.cookies.USERNAME), posts: filtered });
     } else {
         res.redirect('/app/login');
@@ -133,18 +131,18 @@ router.get('/posts/:id', async (req, res) => {
 });
 
 router.get('/posts/:id/edit', async (req, res) => {
-    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USENAME)) {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
         const { id } = req.params;
         const data = await db.get('posts/' + id);
 
         if (!data) {
-            res.render('404');
+            res.render('404', { user: await getUserInfo(req.cookies.USERNAME )});
             return true;
         }
-
+    
         if (data.author == req.cookies.USERNAME) {
-            res.render('edit', { user: await getUserInfo(req.cookies.USERNAME), post: data });
+            res.render('edit', { user: await getUserInfo(req.cookies.USERNAME), prefill: data });
         } else {
             res.redirect('/app/posts/' + id);
         }
@@ -152,7 +150,7 @@ router.get('/posts/:id/edit', async (req, res) => {
     } else {
         res.redirect('/app/login');
     }
-})
+});
 
 router.get('/users/:username', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
@@ -180,7 +178,7 @@ router.get('/users/:username', async (req, res) => {
         let data = { isFriend, pageUser: cleanPageUser, user: await getUserInfo(username) };
 
         if (isFriend) {
-
+            
             // retrieve full posts
             const posts = await db.get(`auth/users/${pageUsername}/posts`);
             let detailedPosts = [];
@@ -191,7 +189,6 @@ router.get('/users/:username', async (req, res) => {
                 o++;
             }
             data.posts = _.orderBy(detailedPosts, ['timestamp'], ['desc']);;
-            console.log('USERPOSTS', data.posts);
         }
 
         res.render('user', data);
