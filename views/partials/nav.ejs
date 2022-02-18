@@ -11,9 +11,13 @@
                 </ul>
             <% } %>
             <ul id="nav-mobile"class="right">
-                <li><a onclick="refresh()"><i class="material-icons">refresh</i></a></li>
+                <% if (locals.search) { %>
+                    <li><a onclick="toggleSearch()" class="waves-effect waves-light"><i class="material-icons">search</i></a></li>
+                <% } %>
+                <li><a onclick="refresh()" class="waves-effect waves-light"><i class="material-icons">refresh</i></a></li>
             </ul>
         </div>
+        
     </nav>
 </div>
 <% if (!locals.hideMenu) { %>
@@ -38,3 +42,26 @@
 <% } %>
 
 <br />
+
+<% if (locals.search) { %>
+    <div class="container">
+        <div class="row" id="search-row" hidden="true">
+            <div class="input-field scale-transition">
+              <i class="material-icons prefix">search</i>
+              <input id="search-box" type="text" />
+              <label for="search-box">Search</label>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleSearch() {
+            const searchBox = document.querySelector('#search-row');
+            if (searchBox.getAttribute('hidden')) {
+                searchBox.removeAttribute('hidden');
+                searchBox.querySelector('#search-box').focus();
+            } else {
+                searchBox.setAttribute('hidden', 'true');
+            }
+        }
+    </script>
+<% } %>

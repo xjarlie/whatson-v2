@@ -5,7 +5,7 @@
 		<link rel="stylesheet" href="/public/css/index.css" />
 	</head>
 
-	<%- include('./partials/nav', { title: 'Home', user: user }); %>
+	<%- include('./partials/nav', { title: 'Home', user: user, search: true }); %>
 
 	<div class="fixed-action-btn" id="fab">
 		<a
@@ -19,7 +19,7 @@
 
 	<div class="container">
 		<% for( const i in locals.posts ) { %>
-		<div class="card z-depth-1">
+		<div class="card z-depth-1 post-card" data-postid="<%= posts[i].id %>">
 			<a
 				href="/app/posts/<%= locals.posts[i].id %>"
 				style="color: black; font-weight: bold"
@@ -32,11 +32,11 @@
 						><%= posts[i].title %></span
 					>
 
-					<div class="chip deep-orange white-text"><%= posts[i].category %></div>
+					<div class="chip deep-orange white-text category-chip"><%= posts[i].category %></div>
 					<% if (posts[i].genre) { %>
-						<div class="chip"><%= posts[i].genre %></div>
+						<div class="chip genre-chip"><%= posts[i].genre %></div>
 					<% } %>
-					<p class="deep-orange-text" style="width: fit-content">
+					<p class="deep-orange-text author-p" style="width: fit-content">
 						<%= posts[i].author %>
 					</p>
 				</div>
@@ -52,5 +52,31 @@
 	<%- include('./partials/foot'); %>
 	<script>
 		M.AutoInit();
+
+		const posts = [...document.querySelectorAll('.post-card')];
+		console.log(posts);
+		document.querySelector('#search-box').oninput = (e) => {
+
+			const searchTerm = document.querySelector('#search-box').value.trim().toLowerCase();
+
+			if (searchTerm.length > 0) { 
+				for (const i in posts) {
+					const title = posts[i].querySelector('.card-title').textContent.trim().toLowerCase();
+					const genre = posts[i].querySelector('.genre-chip').textContent.trim().toLowerCase();
+					const author = posts[i].querySelector('.author-p').textContent.trim().toLowerCase();
+
+					if (title.includes(searchTerm, 0) || genre.includes(searchTerm, 0) || author.includes(searchTerm, 0)) {
+						posts[i].removeAttribute('hidden');
+					} else {
+						posts[i].setAttribute('hidden', 'true');
+					}
+				}
+			} else {
+				for (const i in posts) {
+					posts[i].removeAttribute('hidden');
+				}
+			}
+		}
+
 	</script>
 </html>
