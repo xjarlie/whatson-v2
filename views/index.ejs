@@ -54,7 +54,6 @@
 		M.AutoInit();
 
 		const posts = [...document.querySelectorAll('.post-card')];
-		console.log(posts);
 		document.querySelector('#search-box').oninput = (e) => {
 
 			const searchTerm = document.querySelector('#search-box').value.trim().toLowerCase();
@@ -77,6 +76,12 @@
 				}
 			}
 		}
+
+		function clearSearch() {
+            for (const i in posts) {
+                posts[i].removeAttribute('hidden');
+            }
+        }
 
 	</script>
 </html>

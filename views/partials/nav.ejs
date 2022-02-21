@@ -58,9 +58,13 @@
             const searchBox = document.querySelector('#search-row');
             if (searchBox.getAttribute('hidden')) {
                 searchBox.removeAttribute('hidden');
+                document.querySelector('#search-box').value = '';
                 searchBox.querySelector('#search-box').focus();
+
             } else {
                 searchBox.setAttribute('hidden', 'true');
+                document.querySelector('#search-box').value = '';
+                clearSearch();
             }
         }
     </script>
