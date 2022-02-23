@@ -61,8 +61,10 @@
 			if (searchTerm.length > 0) { 
 				for (const i in posts) {
 					const title = posts[i].querySelector('.card-title').textContent.trim().toLowerCase();
-					const genre = posts[i].querySelector('.genre-chip').textContent.trim().toLowerCase();
 					const author = posts[i].querySelector('.author-p').textContent.trim().toLowerCase();
+
+					const genreChip = posts[i].querySelector('.genre-chip');
+					const genre = genreChip ? genreChip.textContent.trim().toLowerCase() : '';
 
 					if (title.includes(searchTerm, 0) || genre.includes(searchTerm, 0) || author.includes(searchTerm, 0)) {
 						posts[i].removeAttribute('hidden');
