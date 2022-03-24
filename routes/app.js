@@ -90,7 +90,7 @@ router.get('/posts/create', async (req, res) => {
 
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
-        const friendsList = await db.get(`auth/users/${req.cookies.USERNAME}/friends`);
+        const friendsList = await db.orderedList(`auth/users/${req.cookies.USERNAME}/friends`, 'timestamp', 'desc');
 
         let prefill = {};
         if (query.id) {

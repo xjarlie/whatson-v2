@@ -73,7 +73,8 @@
                 <div class="row">
                     <ul class="collapsible">
                         <li class="list-item">
-                            <div class="collapsible-header waves-effect waves-light" style="width: 100% !important;"><i class="material-icons">person_add_alt_1</i>Recommend to friends <i class="material-icons right">arrow_drop_down</i></div>
+                            <div class="collapsible-header waves-effect waves-light" style="width: 100% !important;" onclick=<%= locals.friends.length > 0 ? '' : "M.toast({html:'You&nbsp;have&nbsp;no&nbsp;friends'})" %> ><i class="material-icons">person_add_alt_1</i>Recommend to friends<i class="material-icons right">arrow_drop_down</i></div>
+                            <% if (locals.friends.length > 0) { %> 
                             <div class="collapsible-body peopleDiv">
                                 <% if (locals.friends) { for (const i in friends) { %>
                                     <div class="row">
@@ -84,6 +85,7 @@
                                     </div>
                                 <% }} %>
                             </div>
+                            <% } %> 
                         </li>
                     </ul>
                 </div>
