@@ -158,16 +158,28 @@ router.get('/users/:username', async (req, res) => {
         const username = req.cookies.USERNAME;
         const { username: pageUsername } = req.params;
 
-
+        // If page requested is active user, show profile page instead
         if (username === pageUsername) {
-            res.render('profile', { user: await getUserInfo(username) });
+
+            const posts = await db.get(`auth/users/${username}/posts`);
+            let detailedPosts = [];
+            let o = 0;
+            for (const i in posts) {
+                const post = await db.get(`posts/${posts[i]}`);
+                detailedPosts[o] = post;
+                o++;
+            }
+            detailedPosts = _.orderBy(detailedPosts, ['timestamp'], ['desc']);
+
+            console.log(detailedPosts);
+            res.render('profile', { user: await getUserInfo(username), posts: detailedPosts });
             return true;
         }
 
         // Check friend status
         const isFriend = await db.get(`auth/users/${username}/friends/${pageUsername}`)? true : false;
 
-        // get userdata
+        // get *clean* userdata
         const pageUser = await db.get(`auth/users/${pageUsername}`);
         if (!pageUser) {
             res.render('404', { user: await getUserInfo(username) });
@@ -188,7 +200,7 @@ router.get('/users/:username', async (req, res) => {
                 detailedPosts[o] = post;
                 o++;
             }
-            data.posts = _.orderBy(detailedPosts, ['timestamp'], ['desc']);;
+            data.posts = _.orderBy(detailedPosts, ['timestamp'], ['desc']);
         }
 
         res.render('user', data);

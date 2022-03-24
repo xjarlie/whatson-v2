@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head'); %>
+    </head>
+    <body>
+        <%- include('./partials/nav', { title: 'Profile', user: user, hideMenu: false, showBack: false }); %>
+
+        <div class="container">
+			<h4 class="center-align" style="font-weight: 500">
+				<%= user.displayName %>
+			</h4>
+			<div class="row center-align">
+				<div class="chip deep-orange white-text center-align">
+					@<%= user.username %>
+				</div>
+			</div>
+            <div class="row">
+                <a href="/app/posts/create" class="btn deep-orange waves-effect waves-light" style="width: 100%;"><i class="material-icons left">edit</i>Create Post</a>
+            </div>
+			<hr />
+            <% if (locals.posts.length == 0) { %>
+
+                <h5 class="center-align">No posts yet</h5>
+    
+            <% } %>
+			<% for (const i in locals.posts) { %>
+			<div class="card z-depth-1">
+				<a
+					href="/app/posts/<%= locals.posts[i].id %>"
+					style="color: black; font-weight: bold"
+				>
+					<div class="card-content">
+						<% if (locals.posts[i].people) {  if (locals.posts[i].people.includes(user.username)) { %>
+							<span class="new badge right deep-orange" data-badge-caption="Recommended to you"></span>
+						<% }} %>
+						<span class="card-title" style="font-weight: bold"
+							><%= posts[i].title %></span
+						>
+						<div class="chip deep-orange white-text">
+							<%= posts[i].category %>
+						</div>
+						<% if (posts[i].genre) { %>
+                            <div class="chip"><%= posts[i].genre %></div>
+                        <% } %>
+					</div>
+				</a>
+			</div>
+			<% } %> 
+            
+
+		</div>
+
+		<%- include('./partials/foot'); %>
+        <script>
+            M.AutoInit();
+        </script>
+    </body>
+</html>
