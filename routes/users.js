@@ -78,6 +78,14 @@ router.post('/requests/send', async (req, res) => {
             }
         }
 
+        // Check if user is self
+        {
+            if (request === username) {
+                res.status(400).json({ error: `You can't send a friend request to yourself, silly`});
+                return true;
+            }
+        }
+
         const result = await db.set(`auth/users/${request}/requests/${username}`, { username, timestamp: Date.now() });
 
         res.status(201).json({ result, message: 'Friend request sent: ' + request });
@@ -86,7 +94,7 @@ router.post('/requests/send', async (req, res) => {
         res.status(401).json({ error: 'Credentials invalid' });
         return true;
     }
-})
+});
 
 router.post('/:username/requests/add', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {

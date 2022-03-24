@@ -59,15 +59,33 @@
                         <label for="review">A Short Review</label>
                     </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="input-field">
 						<select id="people" multiple>
+                            <option value="" disabled selected hidden>No friend selected</option>
                             <% if (locals.friends) { for (const i in friends) {%>
                                 <option value="<%= friends[i].username %>"><%= friends[i].username %> </option>
                             <% }} %>
 						</select>
 						<label>Recommend to friends</label>
 					</div>
+                </div> -->
+                <div class="row">
+                    <ul class="collapsible">
+                        <li class="list-item">
+                            <div class="collapsible-header waves-effect waves-light" style="width: 100% !important;"><i class="material-icons">person_add_alt_1</i>Recommend to friends <i class="material-icons right">arrow_drop_down</i></div>
+                            <div class="collapsible-body peopleDiv">
+                                <% if (locals.friends) { for (const i in friends) { %>
+                                    <div class="row">
+                                        <label>
+                                            <input type="checkbox" id="<%= friends[i].username %>" class="peopleCheckbox" />
+                                            <span><%= friends[i].username %></span>
+                                        </label>
+                                    </div>
+                                <% }} %>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
                 <div class="row">
                     <btn class="waves-effect waves-light deep-orange btn" onclick="post()" style="width: 100%;"><i class="material-icons left">add</i>Recommend</btn>
@@ -89,8 +107,10 @@
                 source = document.querySelector('#source').value.trim(),
                 review = document.querySelector('#review').value.trim();
 
-            const peopleSelect = document.querySelector('#people');
-            const people = [...peopleSelect.options].filter(option => option.selected).map(option => option.value);
+            // const peopleSelect = document.querySelector('#people');
+            // const people = [...peopleSelect.options].filter(option => option.selected).map(option => option.value);
+
+            const people = [...document.querySelectorAll('.peopleCheckbox')].filter(o => o.checked === true).map(j => j.id);
             
             if (!(title && rater && category != 0)) {
                 alert('Please include at least a title, rating and category');

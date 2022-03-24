@@ -93,7 +93,7 @@
 							document.querySelector('#send-btn').classList.add('disabled');
 
 						} else {
-                            alert(json.error);
+                            M.toast({ html: json.error });
                         }
 					};
 				} else if (status == 404) {
