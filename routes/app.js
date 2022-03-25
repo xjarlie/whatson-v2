@@ -4,6 +4,7 @@ const router = express.Router();
 const { checkToken } = require("./checkToken");
 const _ = require('lodash');
 const { getUserInfo } = require("./getUserInfo");
+const { getUserPosts } = require('./getUserPosts');
 
 router.get('/', async (req, res) => {
 
@@ -12,16 +13,24 @@ router.get('/', async (req, res) => {
         let data = await db.orderedList('posts', 'timestamp', 'desc');
         const friendsList = await db.get(`auth/users/${req.cookies.USERNAME}/friends`) || {};
         friendsList[req.cookies.USERNAME] = { username: req.cookies.USERNAME };
-        let filtered = [];
-        if (friendsList) {
-            filtered = _.filter(data, function (o) {
-                if (friendsList[o.author]) {
-                    return o;
-                }
-            });
-        }
+        
+        // OLD POST GETTING, based on posts being stored under users
+        // let filtered = [];
+        // if (friendsList) {
+        //     filtered = _.filter(data, function (o) {
+        //         if (friendsList[o.author]) {
+        //             return o;
+        //         }
+        //     });
+        // }
 
-        res.render('index', { user: await getUserInfo(req.cookies.USERNAME), posts: filtered });
+        // NEW POST GETTING, based on filtering posts by username
+        const friendsUsernames = Object.keys(friendsList).map(key => {
+            return friendsList[key].username;
+        });
+        const userPosts = await getUserPosts(friendsUsernames);
+
+        res.render('index', { user: await getUserInfo(req.cookies.USERNAME), posts: userPosts });
     } else {
         res.redirect('/app/login');
     }
@@ -161,18 +170,21 @@ router.get('/users/:username', async (req, res) => {
         // If page requested is active user, show profile page instead
         if (username === pageUsername) {
 
-            const posts = await db.get(`auth/users/${username}/posts`);
-            let detailedPosts = [];
-            let o = 0;
-            for (const i in posts) {
-                const post = await db.get(`posts/${posts[i]}`);
-                detailedPosts[o] = post;
-                o++;
-            }
-            detailedPosts = _.orderBy(detailedPosts, ['timestamp'], ['desc']);
+            // OLD WAY FOR GETTING POSTS
+            // const posts = await db.get(`auth/users/${username}/posts`);
+            // let detailedPosts = [];
+            // let o = 0;
+            // for (const i in posts) {
+            //     const post = await db.get(`posts/${posts[i]}`);
+            //     detailedPosts[o] = post;
+            //     o++;
+            // }
+            // detailedPosts = _.orderBy(detailedPosts, ['timestamp'], ['desc']);
 
-            console.log(detailedPosts);
-            res.render('profile', { user: await getUserInfo(username), posts: detailedPosts });
+            // NEW WAY OF GETTING POSTS
+            const posts = await getUserPosts([username]);
+
+            res.render('profile', { user: await getUserInfo(username), posts: posts });
             return true;
         }
 
@@ -191,16 +203,20 @@ router.get('/users/:username', async (req, res) => {
 
         if (isFriend) {
             
-            // retrieve full posts
-            const posts = await db.get(`auth/users/${pageUsername}/posts`);
-            let detailedPosts = [];
-            let o = 0;
-            for (const i in posts) {
-                const post = await db.get(`posts/${posts[i]}`);
-                detailedPosts[o] = post;
-                o++;
-            }
-            data.posts = _.orderBy(detailedPosts, ['timestamp'], ['desc']);
+            // retrieve full posts - OLD WAY
+            // const posts = await db.get(`auth/users/${pageUsername}/posts`);
+            // let detailedPosts = [];
+            // let o = 0;
+            // for (const i in posts) {
+            //     const post = await db.get(`posts/${posts[i]}`);
+            //     detailedPosts[o] = post;
+            //     o++;
+            // }
+            // data.posts = _.orderBy(detailedPosts, ['timestamp'], ['desc']);
+
+            // NEW WAY
+            const posts = await getUserPosts([pageUsername]);
+            data.posts = posts;
         }
 
         res.render('user', data);
@@ -229,5 +245,15 @@ router.get('/logout', async (req, res) => {
         res.redirect('/app/login');
     }
 });
+
+router.get('*', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+        res.render('404', { user: await getUserInfo(req.cookies.USERNAME)});
+        return true;
+    } else {
+        res.redirect('/app');
+        return true;
+    }
+})
 
 module.exports = router;

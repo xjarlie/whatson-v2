@@ -145,8 +145,6 @@ router.post('/darkmode', async (req, res) => {
         const username = req.cookies.USERNAME;
         const { darkMode } = req.body;
 
-        console.log(username, darkMode);
-
         const result = await db.set(`auth/users/${username}/darkMode`, darkMode);
     
 
@@ -154,6 +152,6 @@ router.post('/darkmode', async (req, res) => {
     } else {
         res.status(401).json({ error: 'Credentials invalid' });
     }
-})
+});
 
 module.exports = router;

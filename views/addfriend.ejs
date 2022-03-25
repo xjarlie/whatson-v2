@@ -57,6 +57,12 @@
 		<script>
 			M.AutoInit();
 
+			document.querySelector('#search-box').onkeypress = (e) => {
+				if (e.keyCode == 13) {
+					searchUser();
+				}
+			}	
+
 			async function searchUser() {
 				const userToSearch = document.querySelector("#search-box").value.trim();
 

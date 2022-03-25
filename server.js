@@ -20,10 +20,12 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/', indexRouter);
-app.use('/app', appRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);
+
+// Keep this last
+app.use('/app', appRouter);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
