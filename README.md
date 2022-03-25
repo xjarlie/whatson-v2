@@ -1,5 +1,16 @@
 # whatson-v2
 Nodejs remake of [xjarlie/tv-recommend](https://github.com/xjarlie/tv-recommend)
 
-## Original Readme:
-WhatsOn is a web/android app for recommending TV and films to friends - it includes a detailed post function, the ability to add recommendations to your watchlist, and a link to JustWatch to find availability information.
+## Description
+WhatsOn is a web app for recommending TV and films to friends or communities - it includes a custom account and friends system, a watchlist, and availability information from JustWatch. It can be found hosted by me at https://tv.xjarlie.com
+
+## Technologies
+### Backend
+- NodeJS
+- Express server
+- Custom JSON database system - [x-jsondb on npm](https://www.npmjs.com/package/x-jsondb)
+
+### Frontend
+- EJS templating language
+- Client-side javascript
+- [MaterializeCSS](https://materializecss.com/) as a frontend framework
