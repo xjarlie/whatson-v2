@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../conn');
 const crypto = require('crypto');
 const { checkToken } = require("./checkToken");
+const { getUserPosts } = require('./getUserPosts');
 
 router.post('/create', async (req, res) => {
     let data = req.body;
@@ -27,7 +28,9 @@ router.post('/create', async (req, res) => {
 
     data.id = key;
     
-    await db.set(`auth/users/${username}/posts/${key}`, key);
+    // OLD way of storing posts
+    // await db.set(`auth/users/${username}/posts/${key}`, key);
+    
     const result = await db.set('posts/' + key, data);
     res.status(201).json({ message: 'Post posted', result: result });
 });
@@ -40,7 +43,13 @@ router.post('/update', async (req, res) => {
         return false;
     }
 
-    if (!await db.get(`auth/users/${req.cookies.USERNAME}/posts/${post.id}`)) {
+    const userPosts = await getUserPosts([req.cookies.USERNAME]);
+    const exists = userPosts.filter((o) => {
+        if (o.id === post.id) {
+            return o;
+        }
+    });
+    if (!exists) {
         res.status(401).json({ error: 'Credentials invalid' });
         return false;
     }
@@ -67,7 +76,13 @@ router.post('/delete', async (req, res) => {
         return false;
     }
 
-    if (!await db.get(`auth/users/${req.cookies.USERNAME}/posts/${postID}`)) {
+    const userPosts = await getUserPosts([req.cookies.USERNAME]);
+    const exists = userPosts.filter((o) => {
+        if (o.id === postID) {
+            return o;
+        }
+    });
+    if (!exists) {
         res.status(401).json({ error: 'Credentials invalid' });
         return false;
     }
