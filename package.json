@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "nodemon -e js,ejs,html server.js",
-    "build": "docker build . -t xjarlie/whatson && docker push xjarlie/whatson",
+    "build": "docker build . -t xjarlie/whatson:beta && docker push xjarlie/whatson:beta",
     "start": "node server.js"
   },
   "repository": {
