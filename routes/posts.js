@@ -12,7 +12,7 @@ router.post('/create', async (req, res) => {
     const authToken = req.cookies.AUTH_TOKEN;
 
     if (!await checkToken(authToken, username)) {
-        res.status(401).json({ error: 'Authentication invalid, please log in again'});
+        res.status(401).json({ error: 'Authentication invalid, please log in again' });
         return false;
     }
 
@@ -24,27 +24,28 @@ router.post('/create', async (req, res) => {
     while (exists) {
         key = crypto.randomBytes(8).toString('hex');
         const check = await db.get('posts/' + key);
-        if (!check) break; 
+        if (!check) break;
     }
 
     data.id = key;
-    
+
     // OLD way of storing posts
     // await db.set(`auth/users/${username}/posts/${key}`, key);
-    
+
     const result = await db.set('posts/' + key, data);
 
     // Send notifications to friends
     if (result) {
         console.log('here');
         const friends = await db.get(`auth/users/${username}/friends`);
+        if (friends) {
+            const title = 'New Recommendation';
+            const message = `Your friend ${username} just recommended '${data.title}'. Check it out!`;
+            const url = '/app/posts/' + key;
 
-        const title = 'New Recommendation';
-        const message = `Your friend ${username} just recommended '${data.title}'. Check it out!`;
-        const url = '/app/posts/' + key;
-
-        for (const i in friends) {
-            await sendNotification(friends[i].username, title, message, url);
+            for (const i in friends) {
+                await sendNotification(friends[i].username, title, message, url);
+            }
         }
     }
 
@@ -53,9 +54,9 @@ router.post('/create', async (req, res) => {
 
 router.post('/update', async (req, res) => {
     const post = req.body;
-    
+
     if (!await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
-        res.status(401).json({ error: 'Authentication invalid, please log in again'});
+        res.status(401).json({ error: 'Authentication invalid, please log in again' });
         return false;
     }
 
@@ -88,7 +89,7 @@ router.post('/delete', async (req, res) => {
     const { postID } = req.body;
 
     if (!await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
-        res.status(401).json({ error: 'Authentication invalid, please log in again'});
+        res.status(401).json({ error: 'Authentication invalid, please log in again' });
         return false;
     }
 
@@ -102,7 +103,7 @@ router.post('/delete', async (req, res) => {
         res.status(401).json({ error: 'Credentials invalid' });
         return false;
     }
-    
+
     const result = await db.remove(`posts/${postID}`);
     const resultUser = await db.remove(`auth/users/${req.cookies.USERNAME}/posts/${postID}`);
 
