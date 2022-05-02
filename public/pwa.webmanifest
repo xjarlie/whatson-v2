@@ -2,6 +2,33 @@
   "name": "WhatsOn - Share TV with friends",
   "short_name": "WhatsOn",
   "description": "Recommend TV and films to your friends and communities",
+  "categories": "social",
+  "screenshots": [
+    {
+      "src": "../../public/img/screenshots-home.png",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Homescreen"
+    },
+    {
+      "src": "../../public/img/screenshots-friends.png",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Friends"
+    },
+    {
+      "src": "../../public/img/screenshots-watchlist.png",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Watchlist"
+    },
+    {
+      "src": "../../public/img/screenshots-settings.png",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Settings"
+    }
+  ],
   "icons": [
     {
       "src": "../../public/img/icon-192.png",
@@ -27,6 +54,33 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Post",
+      "url": "/app/posts/create",
+      "description": "Recommend a film or TV show",
+      "icons": [
+        {
+          "src": "../../public/img/edit-icon.png",
+          "type": "image/png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Friends",
+      "url": "/app/friends"
+    },
+    {
+      "name": "Watchlist",
+      "url": "/app/watchlist"
+    },
+    {
+      "name": "Profile",
+      "url": "/app/profile"
+    }
+    
   ],
   "start_url": "/app",
   "display": "standalone",

@@ -12,7 +12,7 @@
 		<% for( const i in locals.posts ) { %>
             <div class="card z-depth-1" data-postid="<%= posts[i].id %>">
                 <a
-                    href="/app/posts/<%= posts[i].id %>"
+                    href="/app/posts/<%= posts[i].id %>?referrer=/watchlist"
                     style="color: black; font-weight: bold"
                 >
                     <div class="card-content">
@@ -81,7 +81,7 @@
 
             await removeFromWatchlist(e, id);
 
-            redirect(`/app/posts/create?id=${id}`);
+            redirect(`/app/posts/create?id=${id}&referrer=/watchlist`);
         }
     </script>
     </body>

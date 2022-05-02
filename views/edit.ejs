@@ -6,7 +6,7 @@
     </head>
     <body>
 
-        <%- include('./partials/nav', { title: 'Edit', user: user, hideMenu: true, showBack: true }); %>
+        <%- include('./partials/nav', { title: 'Edit', user: user, hideMenu: true, showBack: true, customBack: 'customBack()' }); %>
 
         <div class="container">
             <div class="row">
@@ -108,11 +108,27 @@
                 console.log(status, json);
 
                 if (status === 201) {
-                    redirect('/app/posts/<%= prefill.id %>');
+                    
+                    const params = new URLSearchParams(window.location.search);
+                    if (params.get('origin')) {
+                        redirect('/app/posts/<%= prefill.id %>?referrer=' + params.get('origin'));
+                    } else {
+                        redirect('/app/posts/<%= prefill.id %>');
+                    }
+                    
                 } else {
                     alert(json.error);
                 }
 
+            }
+
+            function customBack() {
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('origin')) {
+                    redirect('/app/posts/<%= prefill.id %>?referrer=' + params.get('origin'));
+                } else {
+                    redirect('/app/posts/<%= prefill.id %>');
+                }
             }
         </script>
     </body>

@@ -16,7 +16,7 @@
 				</div>
 			</div>
             <div class="row">
-                <a href="/app/posts/create" class="btn deep-orange waves-effect waves-light" style="width: 100%;"><i class="material-icons left">edit</i>Create Post</a>
+                <a href="/app/posts/create?referrer=/users/<%= user.username %> " class="btn deep-orange waves-effect waves-light" style="width: 100%;"><i class="material-icons left">edit</i>Create Post</a>
             </div>
 			<hr />
             <% if (locals.posts.length == 0) { %>
@@ -27,7 +27,7 @@
 			<% for (const i in locals.posts) { %>
 			<div class="card z-depth-1">
 				<a
-					href="/app/posts/<%= locals.posts[i].id %>"
+					href="/app/posts/<%= locals.posts[i].id %>?referrer=/users/<%= user.username %> "
 					style="color: black; font-weight: bold"
 				>
 					<div class="card-content">

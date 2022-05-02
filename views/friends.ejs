@@ -42,7 +42,7 @@
                 <ul class="collapsible">
                     <% for (const i in friends) { %>
                         <li class="list-item">
-                            <div class="collapsible-header friend-item" onclick="redirect('/app/users/<%= friends[i].username %>')"><i class="material-icons">person</i><%= friends[i].username %></div>
+                            <div class="collapsible-header friend-item" onclick="redirect('/app/users/<%= friends[i].username %>?referrer=/friends')"><i class="material-icons">person</i><%= friends[i].username %></div>
                         </li>
                     <% } %>
                 </ul>

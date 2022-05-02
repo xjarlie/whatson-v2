@@ -14,4 +14,13 @@
         window.location.href = url;
         return false;
     }
+
+    function goBack() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('referrer')) {
+            redirect(`/app${params.get('referrer')}`);
+        } else {
+            redirect('/app');
+        }
+    }
 </script>
