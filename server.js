@@ -8,6 +8,7 @@ const appRouter = require('./routes/app');
 const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
+const pushRouter = require('./routes/push');
 
 const app = express();
 const port = 3000;
@@ -27,6 +28,7 @@ app.use('/', indexRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);
+app.use('/api/push', pushRouter);
 
 // Keep this last
 app.use('/app', appRouter);

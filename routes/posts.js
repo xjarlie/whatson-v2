@@ -4,6 +4,7 @@ const db = require('../conn');
 const crypto = require('crypto');
 const { checkToken } = require("./checkToken");
 const { getUserPosts } = require('./getUserPosts');
+const sendNotification = require('./sendNotification');
 
 router.post('/create', async (req, res) => {
     let data = req.body;
@@ -32,6 +33,21 @@ router.post('/create', async (req, res) => {
     // await db.set(`auth/users/${username}/posts/${key}`, key);
     
     const result = await db.set('posts/' + key, data);
+
+    // Send notifications to friends
+    if (result) {
+        console.log('here');
+        const friends = await db.get(`auth/users/${username}/friends`);
+
+        const title = 'New Recommendation';
+        const message = `Your friend ${username} just recommended '${data.title}'. Check it out!`;
+        const url = '/app/posts/' + key;
+
+        for (const i in friends) {
+            await sendNotification(friends[i].username, title, message, url);
+        }
+    }
+
     res.status(201).json({ message: 'Post posted', result: result });
 });
 

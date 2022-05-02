@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<%- include('./partials/head'); %>
-	</head>
-	<body>
-		<%- include('./partials/nav', { title: 'Settings', user: user }); %>
 
-		<div class="container">
-			<div class="row">
+<head>
+    <%- include('./partials/head'); %>
+</head>
+
+<body>
+    <%- include('./partials/nav', { title: 'Settings' , user: user }); %>
+
+        <div class="container">
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <button type="button" class="btn deep-orange waves-effect waves-light" style="width: 100%;"
+                            onclick="requestNotificationPermission()">Enable notifications</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="card switch">
                     <div class="card-content">
                         <span class="card-title" style="font-weight: 500;">
                             Dark Mode
                             <div class="right">
-                                <label>       
-                                    <input type="checkbox" id="darkmode" onclick="darkMode()" <%= user.darkMode? 'checked' : '' %>>
+                                <label>
+                                    <input type="checkbox" id="darkmode" onclick="darkMode()"
+                                        <%=user.darkMode? 'checked' : '' %>>
                                     <span class="lever"></span>
                                 </label>
                             </div>
@@ -26,49 +37,129 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
-                            <h6><i class="material-icons left">face</i><%= locals.user.displayName %></h6>
+                            <h6><i class="material-icons left">face</i>
+                                <%= locals.user.displayName %>
+                            </h6>
                         </div>
                         <div class="row">
-                            <h6><i class="material-icons left">account_circle</i><%= locals.user.username %></h6>
+                            <h6><i class="material-icons left">account_circle</i>
+                                <%= locals.user.username %>
+                            </h6>
                         </div>
                         <div class="row">
-                            <h6><i class="material-icons left">email</i><%= locals.user.email %></h6>
+                            <h6><i class="material-icons left">email</i>
+                                <%= locals.user.email %>
+                            </h6>
                         </div>
-                        <button type="button" class="btn waves-effect waves-light red darken-2" onclick="logOut()" style="width: 100%;"><i class="material-icons left">logout</i>Log Out</button>
+                        <button type="button" class="btn waves-effect waves-light red darken-2" onclick="logOut()"
+                            style="width: 100%;"><i class="material-icons left">logout</i>Log Out</button>
                     </div>
                 </div>
             </div>
-		</div>
+        </div>
 
-		<%- include('./partials/foot') %>
-		<script>
-			M.AutoInit();
+        <%- include('./partials/foot') %>
+            <script>
+                M.AutoInit();
 
-            async function darkMode() {
-                const checkbox = document.querySelector('#darkmode');
-                console.log(checkbox.checked);
+                async function darkMode() {
+                    const checkbox = document.querySelector('#darkmode');
+                    console.log(checkbox.checked);
 
-                const response = await fetch(`/api/users/darkmode`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ darkMode: checkbox.checked })
-                });
-                const status = await response.status;
-                const json = await response.json();
-                console.log(status, json);
+                    const response = await fetch(`/api/users/darkmode`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ darkMode: checkbox.checked })
+                    });
+                    const status = await response.status;
+                    const json = await response.json();
+                    console.log(status, json);
 
-                if (status == 200) {
-                    reload();
-                } else {
-                    alert('Error: ' + json.error);
+                    if (status == 200) {
+                        reload();
+                    } else {
+                        alert('Error: ' + json.error);
+                    }
                 }
-            }
 
-            function logOut() {
-                redirect('/app/logout');
-            }
-		</script>
-	</body>
+                function requestNotificationPermission() {
+                    if (!("Notification" in window)) {
+                        return false;
+                    }
+
+                    if (Notification.permission === 'granted') {
+                        subscribe();
+                    } else if (Notification.permission !== 'denied') {
+                        Notification.requestPermission().then((result) => {
+                            if (result === 'granted') {
+                                subscribe();
+                            }
+                        });
+                    }
+
+
+                }
+
+                function subscribe() {
+                    if ('serviceWorker' in navigator) {
+                        navigator.serviceWorker.ready.then(async function (reg) {
+
+                            const response = await fetch('/api/push/vapidPublicKey');
+                            const vapidPublicKey = await response.text();
+                            const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+
+                            reg.pushManager.subscribe({
+                                userVisibleOnly: true,
+                                applicationServerKey: convertedVapidKey
+                            }).then(async (subscription) => {
+                                const result = await fetch('/api/push/register', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        subscription: subscription
+                                    })
+                                });
+                            });
+
+                            alert('Notifications enabled');
+                        });
+                    }
+                }
+
+                function urlBase64ToUint8Array(base64String) {
+                    var padding = '='.repeat((4 - base64String.length % 4) % 4);
+                    var base64 = (base64String + padding)
+                        .replace(/\-/g, '+')
+                        .replace(/_/g, '/');
+
+                    var rawData = window.atob(base64);
+                    var outputArray = new Uint8Array(rawData.length);
+
+                    for (var i = 0; i < rawData.length; ++i) {
+                        outputArray[i] = rawData.charCodeAt(i);
+                    }
+                    return outputArray;
+                }
+
+                // function randomNotification() {
+                //     const notifTitle = 'Notification';
+                //     const options = {
+                //         body: 'This is a notification lolz',
+                //         icon: '/public/img/icon.png'
+                //     };
+                //     new Notification(notifTitle, options);
+                //     setTimeout(randomNotification, 30000);
+                // }
+
+
+                function logOut() {
+                    redirect('/app/logout');
+                }
+            </script>
+</body>
+
 </html>
