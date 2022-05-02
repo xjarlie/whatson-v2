@@ -19,6 +19,13 @@
     
 
         <div class="container">
+            <div class="row" id="search-row" hidden="true">
+                <div class="input-field scale-transition">
+                      <i class="material-icons prefix">search</i>              		
+                    <input id="search-box" type="text" />
+                      <label for="search-box">Search</label>
+                </div>
+            </div>
             <% if (locals.requests.length > 0) { %>
                 <h5 id="requestsH">Requests:</h5>
                 <ul class="collapsible requestsSection" id="requestsCollapsible">

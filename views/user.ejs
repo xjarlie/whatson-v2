@@ -6,7 +6,7 @@
 
 	<body>
 		<%- include('./partials/nav', { title: 'User', user: user, hideMenu: true,
-		showBack: true }); %>
+		showBack: true, search: true }); %>
 
 		<div class="container">
 			<h4 class="center-align" style="font-weight: 500">
@@ -17,11 +17,18 @@
 					@<%= pageUser.username %>
 				</div>
 			</div>
-
+			<div class="row"></div>
+			<div class="row" id="search-row" hidden="true">
+				<div class="input-field scale-transition">
+					  <i class="material-icons prefix">search</i>              		
+					<input id="search-box" type="text" />
+					  <label for="search-box">Search</label>
+				</div>
+			</div>
 			<hr />
 
 			<% if (locals.isFriend) { %> <% for (const i in locals.posts) { %>
-			<div class="card z-depth-1">
+			<div class="card z-depth-1 post-card">
 				<a
 					href="/app/posts/<%= locals.posts[i].id %>?referrer=/users/<%= pageUser.username %>"
 					style="color: black; font-weight: bold"
@@ -37,7 +44,7 @@
 							<%= posts[i].category %>
 						</div>
 						<% if (posts[i].genre) { %>
-                            <div class="chip"><%= posts[i].genre %></div>
+                            <div class="chip genre-chip"><%= posts[i].genre %></div>
                         <% } %>
 					</div>
 				</a>
@@ -85,6 +92,37 @@
 					alert(json.error);
 				}
 			}
+
+			const posts = [...document.querySelectorAll('.post-card')];
+			document.querySelector('#search-box').oninput = (e) => {
+
+				const searchTerm = document.querySelector('#search-box').value.trim().toLowerCase();
+
+				if (searchTerm.length > 0) { 
+					for (const i in posts) {
+						const title = posts[i].querySelector('.card-title').textContent.trim().toLowerCase();
+
+						const genreChip = posts[i].querySelector('.genre-chip');
+						const genre = genreChip ? genreChip.textContent.trim().toLowerCase() : '';
+
+						if (title.includes(searchTerm, 0) || genre.includes(searchTerm, 0)) {
+							posts[i].removeAttribute('hidden');
+						} else {
+							posts[i].setAttribute('hidden', 'true');
+						}
+					}
+				} else {
+					for (const i in posts) {
+						posts[i].removeAttribute('hidden');
+					}
+				}
+			}
+
+			function clearSearch() {
+            	for (const i in posts) {
+                	posts[i].removeAttribute('hidden');
+            	}
+        	}	
 		</script>
 	</body>
 </html>

@@ -18,6 +18,15 @@
 	</div>
 
 	<div class="container">
+
+        <div class="row" id="search-row" hidden="true">
+        	<div class="input-field scale-transition">
+          		<i class="material-icons prefix">search</i>              		
+				<input id="search-box" type="text" />
+              	<label for="search-box">Search</label>
+            </div>
+        </div>
+
 		<% for( const i in locals.posts ) { %>
 		<div class="card z-depth-1 post-card" data-postid="<%= posts[i].id %>">
 			<a
