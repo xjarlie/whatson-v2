@@ -39,7 +39,7 @@ router.get('/sendNotification', async (req, res) => {
 
     const subscription = await db.get(`auth/users/xjarlie/push/subscription`);
 
-    const notif = await sendNotification('xjarlie', 'New Recommendation', 'Your friend, loui54, recommended Its a Sin', '/app/posts/8c145d5c9aec4d60');
+    const notif = await sendNotification('xjarlie', 'New Recommendation', 'Your friend, loui54, recommended Its a Sin', '/app/posts/8c145d5c9aec4d6069');
 
     res.send('hello world');
 });
