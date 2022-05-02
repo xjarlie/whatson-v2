@@ -64,7 +64,7 @@
 			}	
 
 			async function searchUser() {
-				const userToSearch = document.querySelector("#search-box").value.trim();
+				const userToSearch = document.querySelector("#search-box").value.trim().toLowerCase();
 
 				const response = await fetch(`/api/users/search/${userToSearch}`);
 				const status = await response.status;
