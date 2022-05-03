@@ -62,14 +62,19 @@
   media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
 
 <% if (locals.user) { %>
+<% if (locals.user.experiments.amoled) { %>
+  <link rel="stylesheet" href="/public/css/amoled.css" />
+<% } else { %>
 <% if (locals.user.darkMode) { %>
 <link rel="stylesheet" href="/public/css/darkmode.css" />
 <meta name="theme-color" content="#292929" />
 <% } else { %>
   <meta name="theme-color" content="#ff5722" />
 <% } %>
+<% } %>
 <% } else { %>
 <meta name="theme-color" content="#ff5722" />
 <% } %>
+
 
 <title>WhatsOn</title>

@@ -186,16 +186,16 @@ router.post('/experiments/:experiment', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
         
         const username = req.cookies.USERNAME;
-        const { layout } = req.body;
+        const { enabled } = req.body;
         const { experiment } = req.params;
 
-        const experiments = ['layout'];
+        const experiments = ['layout', 'amoled'];
         if (!experiments.includes(experiment)) {
             res.status(404).json({ error: 'Experiment not found' });
             return true;
         }
 
-        const result = await db.set(`auth/users/${username}/experiments/${experiment}`, layout);
+        const result = await db.set(`auth/users/${username}/experiments/${experiment}`, enabled);
 
         res.status(200).json({ result, message: 'Dark mode preferences updated' });
 

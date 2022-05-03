@@ -37,6 +37,22 @@
                 <div class="card switch">
                     <div class="card-content">
                         <span class="card-title" style="font-weight: 500;">
+                            Amoled mode
+                            <div class="right">
+                                <label>
+                                    <input type="checkbox" id="amoled" onclick="amoled()"
+                                        <%=user.experiments.amoled? 'checked' : '' %>>
+                                    <span class="lever"></span>
+                                </label>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card switch">
+                    <div class="card-content">
+                        <span class="card-title" style="font-weight: 500;">
                             Experimental layout
                             <div class="right">
                                 <label>
@@ -108,7 +124,28 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ layout: checkbox.checked })
+                        body: JSON.stringify({ enabled: checkbox.checked })
+                    });
+                    const status = await response.status;
+                    const json = await response.json();
+                    console.log(status, json);
+
+                    if (status === 200) {
+                        reload();
+                    } else {
+                        alert('Error ' + json.error);
+                    }
+                }
+
+                async function amoled() {
+                    const checkbox = document.querySelector('#amoled');
+
+                    const response = await fetch(`/api/users/experiments/amoled`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ enabled: checkbox.checked })
                     });
                     const status = await response.status;
                     const json = await response.json();

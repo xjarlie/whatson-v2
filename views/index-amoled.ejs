@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<%- include('./partials/head'); %>
+		<link rel="stylesheet" href="/public/css/index.css" />
+		<link rel="stylesheet" href="/public/css/amoled.css" />
+	</head>
+
+	<%- include('./partials/nav', { title: 'Home', user: user, search: true }); %>
+
+	<div class="fixed-action-btn" id="fab">
+		<a
+			class="btn-floating btn-large deep-orange"
+			href="/app/posts/create?referrer=/"
+			id="fabstyle"
+		>
+			<i class="large material-icons">mode_edit</i>
+		</a>
+	</div>
+
+	<div class="container-fluid">
+
+        <div class="row" id="search-row" hidden="true">
+        	<div class="input-field scale-transition">
+          		<i class="material-icons prefix">search</i>              		
+				<input id="search-box" type="text" />
+              	<label for="search-box">Search</label>
+            </div>
+        </div>
+
+		<% for( const i in locals.posts ) { %>
+		<div class="card z-depth-1 post-card" data-postid="<%= posts[i].id %>">
+			<a
+				href="/app/posts/<%= locals.posts[i].id %>?referrer=/"
+				style="color: black; font-weight: bold"
+			>
+				<div class="card-content">
+					<% if (locals.posts[i].people) {  if (locals.posts[i].people.includes(user.username)) { %>
+						<span class="new badge right deep-orange" data-badge-caption="Recommended to you"></span>
+					<% }} %>
+					<p class="deep-orange-text author-p" style="width: fit-content">
+						@<%= posts[i].author %>
+					</p>
+					<span class="card-title" style="font-weight: bold"
+						><%= posts[i].title %></span
+					>
+
+					<div class="rating">
+						<% for (let j = 1; j < 6; j++) { %>
+							<span class="star star-<%= j %>  <% if (locals.posts[i].rating >= j) { %> deep-orange-text <% } else { %> grey-text <% } %>">★</span>
+						<% } %>
+					</div>
+
+					<div class="chip deep-orange white-text category-chip"><%= posts[i].category %></div>
+					<% if (posts[i].genre) { %>
+						<div class="chip genre-chip"><%= posts[i].genre %></div>
+					<% } %>
+
+					<% if (posts[i].review) { %>
+					<div class="desc" style="padding-top: 1rem; padding-bottom: 1rem;">
+						<% n = 70 %>
+						<!-- <p><%= (posts[i].review.length > n) ? posts[i].review.substr(0, n-1) + '...' : posts[i].review  %> <% if (posts[i].review.length > n) { %> <span style="color: grey">Read more</span><% } %></p> -->
+						<p><%= posts[i].review %></p>
+					</div>
+					<% } %>
+					
+				</div>
+			</a>
+		</div>
+		<% } %>
+		<div class="row center-align" id="nothing" <%= locals.posts.length == 0 ? '' : 'hidden' %>>
+			<h5>Nothing here</h5>
+			<h6>Start by creating a post using the pencil button</h6>
+		</div>
+	</div>
+
+	<%- include('./partials/foot'); %>
+	<script>
+		M.AutoInit();
+
+		const posts = [...document.querySelectorAll('.post-card')];
+		document.querySelector('#search-box').oninput = (e) => {
+
+			const searchTerm = document.querySelector('#search-box').value.trim().toLowerCase();
+
+			if (searchTerm.length > 0) { 
+				for (const i in posts) {
+					const title = posts[i].querySelector('.card-title').textContent.trim().toLowerCase();
+					const author = posts[i].querySelector('.author-p').textContent.trim().toLowerCase();
+
+					const genreChip = posts[i].querySelector('.genre-chip');
+					const genre = genreChip ? genreChip.textContent.trim().toLowerCase() : '';
+
+					if (title.includes(searchTerm, 0) || genre.includes(searchTerm, 0) || author.includes(searchTerm, 0)) {
+						posts[i].removeAttribute('hidden');
+					} else {
+						posts[i].setAttribute('hidden', 'true');
+					}
+				}
+			} else {
+				for (const i in posts) {
+					posts[i].removeAttribute('hidden');
+				}
+			}
+		}
+
+		function clearSearch() {
+            for (const i in posts) {
+                posts[i].removeAttribute('hidden');
+            }
+        }
+
+	</script>
+</html>
