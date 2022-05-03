@@ -1,6 +1,6 @@
 {
   "name": "whatson-v2",
-  "version": "2.0.1",
+  "version": "2.3.0",
   "description": "Nodejs remake of xjarlie/tv-recommend",
   "main": "server.js",
   "scripts": {
