@@ -60,6 +60,13 @@
 						<% if (posts[i].genre) { %>
                             <div class="chip genre-chip"><%= posts[i].genre %></div>
                         <% } %>
+						<% if (posts[i].review) { %>
+                            <div class="desc" style="padding-top: 1rem; padding-bottom: 1rem;">
+                                <% n = 70 %>
+                                <p><%- (posts[i].review.length > n) ? posts[i].review.substr(0, n-1) + '&hellip;' : posts[i].review  %> <span style="color: grey">Read more</span></p>
+                                <!-- <p><%= posts[i].review %></p> -->
+                            </div>
+                            <% } %>
 					</div>
 				</a>
 			</div>

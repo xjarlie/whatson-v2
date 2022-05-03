@@ -43,13 +43,21 @@
 
 					<div class="rating">
 						<% for (let j = 1; j < 6; j++) { %>
-							<span class="star star-<%= j %>  <% if (locals.posts[i].rating >= j) { %> deep-orange-text <% } %>">★</span>
+							<span class="star star-<%= j %>  <% if (locals.posts[i].rating >= j) { %> deep-orange-text <% } else { %> grey-text <% } %>">★</span>
 						<% } %>
 					</div>
 
 					<div class="chip deep-orange white-text category-chip"><%= posts[i].category %></div>
 					<% if (posts[i].genre) { %>
 						<div class="chip genre-chip"><%= posts[i].genre %></div>
+					<% } %>
+
+					<% if (posts[i].review) { %>
+					<div class="desc" style="padding-top: 1rem; padding-bottom: 1rem;">
+						<% n = 70 %>
+						<p><%- (posts[i].review.length > n) ? posts[i].review.substr(0, n-1) + '&hellip;' : posts[i].review  %> <span style="color: grey">Read more</span></p>
+						<!-- <p><%= posts[i].review %></p> -->
+					</div>
 					<% } %>
 					<p class="deep-orange-text author-p" style="width: fit-content">
 						<%= posts[i].author %>

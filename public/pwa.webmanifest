@@ -5,25 +5,25 @@
   "categories": "social",
   "screenshots": [
     {
-      "src": "../../public/img/screenshots-home.png",
+      "src": "../../public/img/screenshot-home.png",
       "type": "image/png",
       "platform": "narrow",
       "label": "Homescreen"
     },
     {
-      "src": "../../public/img/screenshots-friends.png",
+      "src": "../../public/img/screenshot-friends.png",
       "type": "image/png",
       "platform": "narrow",
       "label": "Friends"
     },
     {
-      "src": "../../public/img/screenshots-watchlist.png",
+      "src": "../../public/img/screenshot-watchlist.png",
       "type": "image/png",
       "platform": "narrow",
       "label": "Watchlist"
     },
     {
-      "src": "../../public/img/screenshots-settings.png",
+      "src": "../../public/img/screenshot-settings.png",
       "type": "image/png",
       "platform": "narrow",
       "label": "Settings"
