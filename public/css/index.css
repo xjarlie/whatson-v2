@@ -1,3 +1,11 @@
 .card {
     margin-bottom: 30px;
 }
+
+.rating {
+    padding-bottom: 0.5rem;
+}
+
+.star {
+    font-size: 1.5em;
+}

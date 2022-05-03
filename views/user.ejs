@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<%- include('./partials/head'); %>
+		<link rel="stylesheet" href="/public/css/index.css" />
 	</head>
 
 	<body>
@@ -40,6 +41,13 @@
 						<span class="card-title" style="font-weight: bold"
 							><%= posts[i].title %></span
 						>
+						
+						<div class="rating">
+							<% for (let j = 1; j < 6; j++) { %>
+								<span class="star star-<%= j %>  <% if (locals.posts[i].rating >= j) { %> deep-orange-text <% } %>">★</span>
+							<% } %>
+						</div>
+
 						<div class="chip deep-orange white-text">
 							<%= posts[i].category %>
 						</div>
