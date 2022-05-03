@@ -1,4 +1,5 @@
 const express = require('express');
+const sendNotification = require('./sendNotification');
 const router = express.Router();
 const db = require('../conn');
 const { checkToken } = require("./checkToken");
@@ -87,6 +88,10 @@ router.post('/requests/send', async (req, res) => {
         }
 
         const result = await db.set(`auth/users/${request}/requests/${username}`, { username, timestamp: Date.now() });
+        const outgoingResult = await db.set(`auth/users/${username}/outgoingRequests/${request}`, { username: request, timestamp: Date.now() });
+
+        // Send notification
+        await sendNotification(request, 'Friend request', `${username} just sent you a friend request.`, '/app/friends');
 
         res.status(201).json({ result, message: 'Friend request sent: ' + request });
         return true;
@@ -106,6 +111,7 @@ router.post('/:username/requests/add', async (req, res) => {
 
             // Remove request
             const removed = await db.remove(`auth/users/${username}/requests/${request}`);
+            const outgoingRemoved = await db.remove(`auth/users/${request}/outgoingRequests/${username}`);
 
             // Add friend
             const result = await db.set(`auth/users/${username}/friends/${request}`, { username: request, timestamp: Date.now() });
@@ -128,6 +134,7 @@ router.post('/:username/requests/remove', async (req, res) => {
             const { request } = req.body;
 
             const result = await db.remove(`auth/users/${username}/requests/${request}`);
+            const outgoingResult = await db.remove(`auth/users/${request}/outgoingRequests/${username}`);
 
             res.status(201).json({ result, message: 'Removed request: ' + request });
 
@@ -138,6 +145,27 @@ router.post('/:username/requests/remove', async (req, res) => {
         res.status(401).json({ error: 'Credentials invalid' });
     }
 });
+
+router.post('/:username/requests/cancel', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+
+        const { username } = req.params;
+        if (username === req.cookies.USERNAME) {
+
+            const { request } = req.body;
+
+            const outgoingResult = await db.remove(`auth/users/${username}/outgoingRequests/${request}`);
+            const result = await db.remove(`auth/users/${request}/requests/${username}`);
+
+            res.status(201).json({ result, message: 'Cancelled request: ' + request });
+        } else {
+            res.status(401).json({ error: 'Credentials incorrect' });
+        }
+
+    } else {
+        res.status(401).json({ error: 'Credentials invalid' });
+    }
+}); 
 
 router.post('/darkmode', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {

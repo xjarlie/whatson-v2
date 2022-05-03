@@ -41,8 +41,9 @@ router.get('/friends', async (req, res) => {
 
         const friends = await db.orderedList(`auth/users/${req.cookies.USERNAME}/friends`, 'timestamp', 'desc');
         const requests = await db.orderedList(`auth/users/${req.cookies.USERNAME}/requests`, 'timestamp', 'desc');
+        const outgoing = await db.orderedList(`auth/users/${req.cookies.USERNAME}/outgoingRequests`, 'timestamp', 'desc');
 
-        res.render('friends', { user: await getUserInfo(req.cookies.USERNAME), friends, requests });
+        res.render('friends', { user: await getUserInfo(req.cookies.USERNAME), friends, requests, outgoing });
     } else {
         res.redirect('/app/login');
     }

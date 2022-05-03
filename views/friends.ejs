@@ -21,12 +21,12 @@
         <div class="container">
             <div class="row" id="search-row" hidden="true">
                 <div class="input-field scale-transition">
-                      <i class="material-icons prefix">search</i>              		
+                      <i class="material-icons prefix">search</i>
                     <input id="search-box" type="text" />
                       <label for="search-box">Search</label>
                 </div>
             </div>
-            <% if (locals.requests.length > 0) { %>
+            <% if (locals.requests.length > 0 || locals.outgoing.length > 0) { %>
                 <h5 id="requestsH">Requests:</h5>
                 <ul class="collapsible requestsSection" id="requestsCollapsible">
                     <% for (const i in requests) { %>
@@ -40,10 +40,21 @@
                             </div>
                         </li>
                     <% } %>
-                </ul>
-                <% if (locals.friends.length > 0) { %>
-                    <h5>Friends:</h5>
-                <% } %>
+                    <% for (const i in outgoing) { %>
+                        <li data-requestid="<%= outgoing[i].username %>" class="list-item">
+                            <div class="collapsible-header waves-effect waves-light"><i class="material-icons">person</i><%= outgoing[i].username %> <span class="new badge red" data-badge-caption="Outgoing"></span></div>
+                            <div class="collapsible-body">
+                                <button type="button" class="btn deep-orange waves-effect waves-light" style="width: 100%" onclick="redirect('/app/users/<%= outgoing[i].username %>?referrer=/friends')"><i class="material-icons left">launch</i>View profile</button>
+                                <br />
+                                <br />
+                                <button type="button" class="btn red darken-2 waves-effect waves-light" style="width: 100%;" onclick="cancelOutgoing('<%= outgoing[i].username %>')"><i class="material-icons left">remove_circle_outline</i>Cancel</button>
+                            </div>
+                        </li>
+                    <% } %>
+                </ul> 
+            <% } %>
+            <% if (locals.friends.length > 0 && (locals.requests.length > 0 || locals.outgoing.length > 0)) { %>
+                <h5>Friends:</h5>
             <% } %>
             <% if (locals.friends.length > 0) { %>
                 <ul class="collapsible">
@@ -73,6 +84,28 @@
                 
             }
             openFirstRequest();
+            
+            async function cancelOutgoing(outgoing) {
+                const url = '/api/users/<%= user.username %>/requests/cancel';
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ request: outgoing })
+                });
+
+                const status = await response.status;
+                const json = await response.json();
+
+                console.log(status, json);
+
+                if (status === 201) {
+                    document.querySelector(`[data-requestid="${outgoing}"`).remove();
+                    M.toast({ html: `Request cancelled: ${outgoing}` });
+                    openFirstRequest();
+                }
+            }
 
             async function ignore(request) {
                 
@@ -148,6 +181,8 @@
                     friends[i].removeAttribute('hidden');
                 }
             }
+
+            
 
         </script>
     </body>
