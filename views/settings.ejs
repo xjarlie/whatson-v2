@@ -34,6 +34,22 @@
                 </div>
             </div>
             <div class="row">
+                <div class="card switch">
+                    <div class="card-content">
+                        <span class="card-title" style="font-weight: 500;">
+                            Experimental layout
+                            <div class="right">
+                                <label>
+                                    <input type="checkbox" id="exlayout" onclick="exlayout()"
+                                        <%= user.experiments.layout ? 'checked' : '' %>>
+                                    <span class="lever"></span>
+                                </label>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
@@ -81,6 +97,27 @@
                         reload();
                     } else {
                         alert('Error: ' + json.error);
+                    }
+                }
+
+                async function exlayout() {
+                    const checkbox = document.querySelector('#exlayout');
+
+                    const response = await fetch(`/api/users/experiments/layout`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ layout: checkbox.checked })
+                    });
+                    const status = await response.status;
+                    const json = await response.json();
+                    console.log(status, json);
+
+                    if (status === 200) {
+                        reload();
+                    } else {
+                        alert('Error ' + json.error);
                     }
                 }
 

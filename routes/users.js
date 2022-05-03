@@ -182,4 +182,26 @@ router.post('/darkmode', async (req, res) => {
     }
 });
 
+router.post('/experiments/:experiment', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+        
+        const username = req.cookies.USERNAME;
+        const { layout } = req.body;
+        const { experiment } = req.params;
+
+        const experiments = ['layout'];
+        if (!experiments.includes(experiment)) {
+            res.status(404).json({ error: 'Experiment not found' });
+            return true;
+        }
+
+        const result = await db.set(`auth/users/${username}/experiments/${experiment}`, layout);
+
+        res.status(200).json({ result, message: 'Dark mode preferences updated' });
+
+    } else {
+        res.status(401).json({ error: 'Credentials invalid' })
+    }
+})
+
 module.exports = router;

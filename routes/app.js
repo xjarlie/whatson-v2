@@ -30,6 +30,11 @@ router.get('/', async (req, res) => {
         });
         const userPosts = await getUserPosts(friendsUsernames);
 
+        if (await (await getUserInfo(req.cookies.USERNAME)).experiments.layout === true) {
+            res.render('index-test', { user: await getUserInfo(req.cookies.USERNAME), posts: userPosts });
+            return true;
+        }
+
         res.render('index', { user: await getUserInfo(req.cookies.USERNAME), posts: userPosts });
     } else {
         res.redirect('/app/login');
