@@ -59,17 +59,7 @@
                         <label for="review">A Short Review</label>
                     </div>
                 </div>
-                <!-- <div class="row">
-                    <div class="input-field">
-						<select id="people" multiple>
-                            <option value="" disabled selected hidden>No friend selected</option>
-                            <% if (locals.friends) { for (const i in friends) {%>
-                                <option value="<%= friends[i].username %>"><%= friends[i].username %> </option>
-                            <% }} %>
-						</select>
-						<label>Recommend to friends</label>
-					</div>
-                </div> -->
+
                 <div class="row">
                     <ul class="collapsible">
                         <li class="list-item">
@@ -109,8 +99,6 @@
                 source = document.querySelector('#source').value.trim(),
                 review = document.querySelector('#review').value.trim();
 
-            // const peopleSelect = document.querySelector('#people');
-            // const people = [...peopleSelect.options].filter(option => option.selected).map(option => option.value);
 
             const people = [...document.querySelectorAll('.peopleCheckbox')].filter(o => o.checked === true).map(j => j.id);
             

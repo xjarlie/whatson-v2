@@ -149,9 +149,11 @@ router.get('/posts/:id/edit', async (req, res) => {
             res.render('404', { user: await getUserInfo(req.cookies.USERNAME )});
             return true;
         }
+
+        const friendsList = await db.orderedList(`auth/users/${req.cookies.USERNAME}/friends`, 'timestamp', 'desc');
     
         if (data.author == req.cookies.USERNAME) {
-            res.render('edit', { user: await getUserInfo(req.cookies.USERNAME), prefill: data });
+            res.render('edit', { user: await getUserInfo(req.cookies.USERNAME), prefill: data, friends: friendsList });
         } else {
             res.redirect('/app/posts/' + id);
         }
