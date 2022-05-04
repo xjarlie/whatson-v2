@@ -1,5 +1,7 @@
 .card {
     margin-bottom: 30px;
+    /* border-radius: 1em; */
+    width: 100%;
 }
 
 .rating {

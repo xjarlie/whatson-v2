@@ -23,7 +23,7 @@
                     href="/app/posts/<%= posts[i].id %>?referrer=/watchlist"
                     style="color: black; font-weight: bold"
                 >
-                    <div class="card-content">
+                    <div class="card-content waves-effect waves-light">
                         <% if (locals.posts[i].people) {  if (locals.posts[i].people.includes(user.username)) { %>
                             <span class="new badge right deep-orange" data-badge-caption="Recommended to you"></span>
                         <% }} %>
