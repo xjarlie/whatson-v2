@@ -15,5 +15,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+ENV NODE_ENV=production
+
 EXPOSE 3000
 CMD [ "npm", "start" ]

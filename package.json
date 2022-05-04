@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/xjarlie/whatson-v2#readme",
   "dependencies": {
+    "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "ejs": "^3.1.6",

@@ -1,0 +1,13 @@
+.card {
+    margin-bottom: 30px;
+    /* border-radius: 1em; */
+    width: 100%;
+}
+
+.rating {
+    padding-bottom: 0.5rem;
+}
+
+.star {
+    font-size: 1.5em;
+}

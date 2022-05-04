@@ -64,3 +64,8 @@ body {
 .dropdown-content {
     background-color: #292929 !important;
 }
+
+.card-action .minor-button, .card-action .minor-button i {
+    color: #aaaaaa !important;
+    font-weight: 400 !important;
+}

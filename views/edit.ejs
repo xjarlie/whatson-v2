@@ -137,6 +137,8 @@
                 const params = new URLSearchParams(window.location.search);
                 if (params.get('origin')) {
                     redirect('/app/posts/<%= prefill.id %>?referrer=' + params.get('origin'));
+                } else if (params.get('referrer')) {
+                    redirect('/app' + params.get('referrer'));
                 } else {
                     redirect('/app/posts/<%= prefill.id %>');
                 }

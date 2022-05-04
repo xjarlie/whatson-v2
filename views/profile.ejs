@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-		<link rel="stylesheet" href="/public/css/index.css" />
         <%- include('./partials/head'); %>
+		<link rel="stylesheet" href="/public/css/index.css" />
+
     </head>
     <body>
         <%- include('./partials/nav', { title: 'Profile', user: user, hideMenu: false, showBack: false, search: true }); %>
 
-        <div class="container">
+        <div class="container-fluid">
 			<h4 class="center-align" style="font-weight: 500">
 				<%= user.displayName %>
 			</h4>
@@ -16,8 +17,8 @@
 					@<%= user.username %>
 				</div>
 			</div>
-            <div class="row">
-                <a href="/app/posts/create?referrer=/users/<%= user.username %> " class="btn deep-orange waves-effect waves-light" style="width: 100%;"><i class="material-icons left">edit</i>Create Post</a>
+            <div class="row center-align">
+                <a href="/app/posts/create?referrer=/users/<%= user.username %> " class="btn deep-orange waves-effect waves-light center-align"><i class="material-icons left">edit</i>Create Post</a>
             </div>
 			<div class="row"></div>
 			<div class="row" id="search-row" hidden="true">
@@ -35,41 +36,47 @@
     
             <% } %>
 			<% for (const i in locals.posts) { %>
-			<div class="card z-depth-1 post-card waves-effect waves-light">
-				<a
-					href="/app/posts/<%= locals.posts[i].id %>?referrer=/users/<%= user.username %> "
-					style="color: black; font-weight: bold"
-				>
-					<div class="card-content">
-						<% if (locals.posts[i].people) {  if (locals.posts[i].people.includes(user.username)) { %>
-							<span class="new badge right deep-orange" data-badge-caption="Recommended to you"></span>
-						<% }} %>
-						<span class="card-title" style="font-weight: bold"
-							><%= posts[i].title %></span
-						>
-
-						<div class="rating">
-							<% for (let j = 1; j < 6; j++) { %>
-								<span class="star star-<%= j %>  <% if (locals.posts[i].rating >= j) { %> deep-orange-text <% } %>">★</span>
+				<div class="card z-depth-1 post-card" data-postid="<%= posts[i].id %>">
+			
+					<div class="card-content waves-effect waves-light" href="/app/posts/<%= locals.posts[i].id %>?referrer=/users/<%= user.username %>">
+						<a href="/app/posts/<%= locals.posts[i].id %>?referrer=/users/<%= user.username %>" style="color: black; font-weight: bold">
+		
+							<% if (locals.posts[i].people) {  if (locals.posts[i].people.includes(user.username)) { %>
+								<span class="new badge right deep-orange" data-badge-caption="Recommended to you"></span>
+							<% }} %>
+							<p class="deep-orange-text author-p" style="width: fit-content">
+								@<%= posts[i].author %>
+							</p>
+							<span class="card-title" style="font-weight: bold"
+								><%= posts[i].title %></span
+							>
+		
+							<div class="rating">
+								<% for (let j = 1; j < 6; j++) { %>
+									<span class="star star-<%= j %>  <% if (locals.posts[i].rating >= j) { %> deep-orange-text <% } else { %> grey-text <% } %>">★</span>
+								<% } %>
+							</div>
+		
+							<div class="chip deep-orange white-text category-chip"><%= posts[i].category %></div>
+							<% if (posts[i].genre) { %>
+								<div class="chip genre-chip"><%= posts[i].genre %></div>
 							<% } %>
-						</div>
-
-						<div class="chip deep-orange white-text">
-							<%= posts[i].category %>
-						</div>
-						<% if (posts[i].genre) { %>
-                            <div class="chip genre-chip"><%= posts[i].genre %></div>
-                        <% } %>
-						<% if (posts[i].review) { %>
-                            <div class="desc" style="padding-top: 1rem; padding-bottom: 1rem;">
-                                <% n = 70 %>
+		
+							<% if (posts[i].review) { %>
+							<div class="desc" style="padding-top: 1rem; padding-bottom: 1rem;">
+								<% n = 70 %>
 								<p><%= (posts[i].review.length > n) ? posts[i].review.substr(0, n-1) + '...' : posts[i].review  %> <% if (posts[i].review.length > n) { %> <span style="color: grey">Read more</span><% } %></p>
 								<!-- <p><%= posts[i].review %></p> -->
 							</div>
-                        <% } %>
+							<% } %>
+		
+						</a>
 					</div>
-				</a>
-			</div>
+					<div class="card-action">
+						<button class="waves-effect btn-flat waves-light minor-button" type="button" onclick="redirect('/app/posts/<%= posts[i].id %>/edit?referrer=/users/<%= user.username %>')"><i class="material-icons left">edit</i>Edit post</button>
+						<button class="waves-effect btn-flat waves-light minor-button" style="float: right;" type="button"><i class="material-icons" onclick="sharePost('<%= posts[i].id %>', event)">share</i></button>
+					</div>
+				</div>
 			<% } %> 
             
 
@@ -109,6 +116,22 @@
                 posts[i].removeAttribute('hidden');
             }
         }
+
+		function sharePost(id, e) {
+			e.preventDefault();
+			const url = window.location.origin + '/p/' + id
+			if (navigator.share) {
+				navigator.share({
+					url: url
+				});
+			} else if (navigator.clipboard) {
+				navigator.clipboard.writeText(url).then((txt) => {
+					M.toast({ html: 'Copied url to clipboard '});
+				});
+			} else {
+				M.toast({ html: 'Share not supported' });
+			}
+		}
         </script>
     </body>
 </html>

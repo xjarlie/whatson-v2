@@ -5,6 +5,7 @@ const { checkToken } = require("./checkToken");
 const _ = require('lodash');
 const { getUserInfo } = require("./getUserInfo");
 const { getUserPosts } = require('./getUserPosts');
+const { getWatchlistPosts } = require('./getWatchlistPosts');
 
 router.get('/', async (req, res) => {
 
@@ -30,12 +31,16 @@ router.get('/', async (req, res) => {
         });
         const userPosts = await getUserPosts(friendsUsernames);
 
+        const newPosts = await getWatchlistPosts(userPosts, req.cookies.USERNAME);
+
         if (await (await getUserInfo(req.cookies.USERNAME)).experiments.layout === true) {
-            res.render('index-test', { user: await getUserInfo(req.cookies.USERNAME), posts: userPosts });
+            res.render('index-test', { user: await getUserInfo(req.cookies.USERNAME), posts: newPosts });
             return true;
         }
 
-        res.render('index', { user: await getUserInfo(req.cookies.USERNAME), posts: userPosts });
+        
+
+        res.render('index', { user: await getUserInfo(req.cookies.USERNAME), posts: newPosts });
     } else {
         res.redirect('/app/login');
     }
@@ -224,7 +229,8 @@ router.get('/users/:username', async (req, res) => {
 
             // NEW WAY
             const posts = await getUserPosts([pageUsername]);
-            data.posts = posts;
+            data.posts = await getWatchlistPosts(posts, req.cookies.USERNAME);;
+
         }
 
         res.render('user', data);

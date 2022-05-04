@@ -9,7 +9,7 @@
 
     <%- include('./partials/nav', { title: 'Watchlist', user: user, search: true }); %>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row" id="search-row" hidden="true">
         	<div class="input-field scale-transition">
           		<i class="material-icons prefix">search</i>              		
@@ -18,45 +18,46 @@
             </div>
         </div>
 		<% for( const i in locals.posts ) { %>
-            <div class="card z-depth-1 post-card" data-postid="<%= posts[i].id %>">
-                <a
-                    href="/app/posts/<%= posts[i].id %>?referrer=/watchlist"
-                    style="color: black; font-weight: bold"
-                >
-                    <div class="card-content waves-effect waves-light">
+            <div class="card z-depth-1 post-card" data-postid="<%= locals.posts[i].id %>">
+			
+                <div class="card-content waves-effect waves-light" href="/app/posts/<%= locals.posts[i].id %>?referrer=/">
+                    <a href="/app/posts/<%= locals.posts[i].id %>?referrer=/" style="color: black; font-weight: bold">
+    
                         <% if (locals.posts[i].people) {  if (locals.posts[i].people.includes(user.username)) { %>
                             <span class="new badge right deep-orange" data-badge-caption="Recommended to you"></span>
                         <% }} %>
+                        <p class="deep-orange-text author-p" style="width: fit-content">
+                            @<%= posts[i].author %>
+                        </p>
                         <span class="card-title" style="font-weight: bold"
                             ><%= posts[i].title %></span
                         >
-
+    
                         <div class="rating">
                             <% for (let j = 1; j < 6; j++) { %>
-                                <span class="star star-<%= j %>  <% if (locals.posts[i].rating >= j) { %> deep-orange-text <% } %>">★</span>
+                                <span class="star star-<%= j %>  <% if (locals.posts[i].rating >= j) { %> deep-orange-text <% } else { %> grey-text <% } %>">★</span>
                             <% } %>
                         </div>
-
-                        <div class="chip deep-orange white-text"><%= posts[i].category %></div>
+    
+                        <div class="chip deep-orange white-text category-chip"><%= posts[i].category %></div>
                         <% if (posts[i].genre) { %>
                             <div class="chip genre-chip"><%= posts[i].genre %></div>
                         <% } %>
+    
                         <% if (posts[i].review) { %>
-                            <div class="desc" style="padding-top: 1rem; padding-bottom: 1rem;">
-                                <% n = 70 %>
-                                <p><%- (posts[i].review.length > n) ? posts[i].review.substr(0, n-1) + '&hellip;' : posts[i].review  %> <span style="color: grey">Read more</span></p>
-                                <!-- <p><%= posts[i].review %></p> -->
-                            </div>
-                            <% } %>
-                        <p class="deep-orange-text author-p" style="width: fit-content">
-                            <%= posts[i].author %>
-                        </p>
-                    </div>
-                    <div class="card-action">
-                        <button class="btn waves-effect waves-light deep-orange" type="button" onclick="watched(event, '<%= posts[i].id %>')"><i class="material-icons left">check</i>Recommend</button>
-                        <button class="waves-effect btn-flat waves-light" style="color: red;" type="button" onclick="removeFromWatchlist(event, '<%= posts[i].id %>')"><i class="material-icons left red-text">delete</i>Remove</button>
-                    </div>
-                </a>
+                        <div class="desc" style="padding-top: 1rem; padding-bottom: 1rem;">
+                            <% n = 70 %>
+                            <p><%= (posts[i].review.length > n) ? posts[i].review.substr(0, n-1) + '...' : posts[i].review  %> <% if (posts[i].review.length > n) { %> <span style="color: grey">Read more</span><% } %></p>
+                            <!-- <p><%= posts[i].review %></p> -->
+                        </div>
+                        <% } %>
+    
+                    </a>
+                </div>
+                <div class="card-action">
+                    <button class="waves-effect btn-flat waves-light deep-orange-text" type="button" onclick="watched(event, '<%= posts[i].id %>')"><i class="material-icons left deep-orange-text">check</i>Recommend</button>
+                    <button class="waves-effect btn-flat waves-light" style="float: right;" type="button"><i class="material-icons red-text" onclick="removeFromWatchlist(event, '<%= posts[i].id %>')">delete</i></button>
+                </div>
             </div>
         <% } %>
         <div class="row center-align" id="nothing" <%= locals.posts.length == 0 ? '' : 'hidden' %>>
@@ -91,8 +92,9 @@
                 const card = document.querySelector(`[data-postid="${postID}"]`);
                 card.remove();
 
-                const container = document.querySelector('.container');
-                if (container.childElementCount == 1) {
+                const container = document.querySelector('.container-fluid');
+                console.log(container.childElementCount);
+                if (container.childElementCount <= 2) {
                     document.querySelector('#nothing').hidden = false;
                 }
             }

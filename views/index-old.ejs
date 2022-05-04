@@ -3,7 +3,6 @@
 	<head>
 		<%- include('./partials/head'); %>
 		<link rel="stylesheet" href="/public/css/index.css" />
-		<link rel="stylesheet" href="/public/css/amoled.css" />
 	</head>
 
 	<%- include('./partials/nav', { title: 'Home', user: user, search: true }); %>
@@ -18,7 +17,7 @@
 		</a>
 	</div>
 
-	<div class="container-fluid">
+	<div class="container">
 
         <div class="row" id="search-row" hidden="true">
         	<div class="input-field scale-transition">
@@ -29,7 +28,7 @@
         </div>
 
 		<% for( const i in locals.posts ) { %>
-		<div class="card z-depth-1 post-card" data-postid="<%= posts[i].id %>">
+		<div class="card z-depth-1 post-card waves-effect waves-light" data-postid="<%= posts[i].id %>">
 			<a
 				href="/app/posts/<%= locals.posts[i].id %>?referrer=/"
 				style="color: black; font-weight: bold"
@@ -38,9 +37,6 @@
 					<% if (locals.posts[i].people) {  if (locals.posts[i].people.includes(user.username)) { %>
 						<span class="new badge right deep-orange" data-badge-caption="Recommended to you"></span>
 					<% }} %>
-					<p class="deep-orange-text author-p" style="width: fit-content">
-						@<%= posts[i].author %>
-					</p>
 					<span class="card-title" style="font-weight: bold"
 						><%= posts[i].title %></span
 					>
@@ -59,11 +55,13 @@
 					<% if (posts[i].review) { %>
 					<div class="desc" style="padding-top: 1rem; padding-bottom: 1rem;">
 						<% n = 70 %>
-						<!-- <p><%= (posts[i].review.length > n) ? posts[i].review.substr(0, n-1) + '...' : posts[i].review  %> <% if (posts[i].review.length > n) { %> <span style="color: grey">Read more</span><% } %></p> -->
-						<p><%= posts[i].review %></p>
+						<p><%= (posts[i].review.length > n) ? posts[i].review.substr(0, n-1) + '...' : posts[i].review  %> <% if (posts[i].review.length > n) { %> <span style="color: grey">Read more</span><% } %></p>
+						<!-- <p><%= posts[i].review %></p> -->
 					</div>
 					<% } %>
-					
+					<p class="deep-orange-text author-p" style="width: fit-content">
+						<%= posts[i].author %>
+					</p>
 				</div>
 			</a>
 		</div>

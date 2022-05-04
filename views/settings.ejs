@@ -3,6 +3,7 @@
 
 <head>
     <%- include('./partials/head'); %>
+    <link rel="stylesheet" href="/public/css/settings.css" />
 </head>
 
 <body>
@@ -13,57 +14,43 @@
                 <div class="card">
                     <div class="card-content">
                         <button type="button" class="btn deep-orange waves-effect waves-light" style="width: 100%;"
-                            onclick="requestNotificationPermission()">Enable notifications</button>
+                            onclick="requestNotificationPermission()"><i class="material-icons left">notifications_active</i>Enable notifications</button>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="card switch">
-                    <div class="card-content">
-                        <span class="card-title" style="font-weight: 500;">
-                            Dark Mode
-                            <div class="right">
-                                <label>
-                                    <input type="checkbox" id="darkmode" onclick="darkMode()"
-                                        <%=user.darkMode? 'checked' : '' %>>
-                                    <span class="lever"></span>
-                                </label>
-                            </div>
-                        </span>
+            <div class="card">
+                <!-- <div class="row"> -->
+                    <div class="switch">
+                        <div class="card-content">
+                            <span class="card-title" style="font-weight: 500;">
+                                Dark Mode
+                                <div class="right">
+                                    <label>
+                                        <input type="checkbox" id="darkmode" onclick="darkMode()"
+                                            <%=user.darkMode? 'checked' : '' %>>
+                                        <span class="lever"></span>
+                                    </label>
+                                </div>
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="card switch">
-                    <div class="card-content">
-                        <span class="card-title" style="font-weight: 500;">
-                            Amoled mode
-                            <div class="right">
-                                <label>
-                                    <input type="checkbox" id="amoled" onclick="amoled()"
-                                        <%=user.experiments.amoled? 'checked' : '' %>>
-                                    <span class="lever"></span>
-                                </label>
-                            </div>
-                        </span>
+                <!-- </div> -->
+                <!-- <div class="row"> -->
+                    <div class="switch">
+                        <div class="card-content">
+                            <span class="card-title" style="font-weight: 500;">
+                                Amoled mode
+                                <div class="right">
+                                    <label>
+                                        <input type="checkbox" id="amoled" onclick="amoled()"
+                                            <%=user.experiments.amoled? 'checked' : '' %>>
+                                        <span class="lever"></span>
+                                    </label>
+                                </div>
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="card switch">
-                    <div class="card-content">
-                        <span class="card-title" style="font-weight: 500;">
-                            Experimental layout
-                            <div class="right">
-                                <label>
-                                    <input type="checkbox" id="exlayout" onclick="exlayout()"
-                                        <%= user.experiments.layout ? 'checked' : '' %>>
-                                    <span class="lever"></span>
-                                </label>
-                            </div>
-                        </span>
-                    </div>
-                </div>
+                <!-- </div> -->
             </div>
             <div class="row">
                 <div class="card">
