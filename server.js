@@ -18,6 +18,7 @@ app.set('view engine', 'ejs');
 
 app.use(compression());
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/.well-known', express.static(path.join(__dirname, 'public', '.well-known')));
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());

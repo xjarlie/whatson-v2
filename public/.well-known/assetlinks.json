@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "com.xjarlie.whatson",
+                     "sha256_cert_fingerprints": ["86:12:4E:79:28:5E:FE:71:FD:F0:9C:F5:8A:AE:0D:70:E6:C8:CA:83:77:71:02:94:B4:61:80:4D:D8:12:24:72"] }
+      }
+]

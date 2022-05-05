@@ -3,8 +3,13 @@ self.addEventListener('install', function (event) {
 })
 
 self.addEventListener('fetch', function (event) {
-    console.log('used to intercept requests so we can check for the file or data in the cache')
-})
+    console.log('used to intercept requests so we can check for the file or data in the cache');
+
+    caches.keys().then(function(names) {
+        for (let name of names)
+            caches.delete(name);
+    });
+});
 
 self.addEventListener('activate', function (event) {
     console.log('this event triggers when the service worker activates');
@@ -21,7 +26,7 @@ self.addEventListener('activate', function (event) {
             );
         })
     );
-})
+});
 
 self.addEventListener('push', function (e) {
     const { title, message, icon, url, tag } = e.data.json();

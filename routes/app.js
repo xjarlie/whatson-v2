@@ -33,13 +33,6 @@ router.get('/', async (req, res) => {
 
         const newPosts = await getWatchlistPosts(userPosts, req.cookies.USERNAME);
 
-        if (await (await getUserInfo(req.cookies.USERNAME)).experiments.layout === true) {
-            res.render('index-test', { user: await getUserInfo(req.cookies.USERNAME), posts: newPosts });
-            return true;
-        }
-
-        
-
         res.render('index', { user: await getUserInfo(req.cookies.USERNAME), posts: newPosts });
     } else {
         res.redirect('/app/login');
