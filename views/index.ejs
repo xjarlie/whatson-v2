@@ -30,7 +30,7 @@
 		<% for( const i in locals.posts ) { %>
 		<div class="card z-depth-1 post-card" data-postid="<%= posts[i].id %>">
 			
-			<div class="card-content waves-effect waves-light" href="/app/posts/<%= locals.posts[i].id %>?referrer=/">
+			<div class="card-content waves-effect" href="/app/posts/<%= locals.posts[i].id %>?referrer=/">
 				<a href="/app/posts/<%= locals.posts[i].id %>?referrer=/" style="color: black; font-weight: bold">
 
 					<% if (locals.posts[i].people) {  if (locals.posts[i].people.includes(user.username)) { %>
