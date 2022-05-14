@@ -158,10 +158,11 @@
                                 subscribe();
                             }
                         });
+                    } else if (Notification.permission === 'denied') {
+                        alert("Notification permission denied. Please allow notifications in settings.")
                     }
-
-
                 }
+
 
                 function subscribe() {
                     if ('serviceWorker' in navigator) {
