@@ -12,6 +12,10 @@
     box-shadow: none; */
 }
 
+[hidden] {
+    display: none !important;
+}
+
 .container-fluid {
     /* padding-left: 0px;
     padding-right: 0px; */
