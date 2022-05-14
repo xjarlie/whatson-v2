@@ -2,6 +2,17 @@ const db = require("../conn");
 const webPush = require('web-push');
 const { publicKey, privateKey } = require('../vapid-keys.json');
 
+/**
+ * 
+ * @param {string} username 
+ * @param {string} title 
+ * @param {string} message 
+ * @param {string} url 
+ * @param {string} icon 
+ * @param {number} ttl 
+ * @returns 
+ */
+
 async function sendNotification(username, title, message, url='/', icon="/public/img/icon.png", ttl=60) {
 
     const subscription = await db.get(`auth/users/${username}/push/subscription`);

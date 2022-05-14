@@ -1,5 +1,11 @@
 const db = require('../conn');
 
+/**
+ * Authenticates auth token against the token stored in db
+ * @param {string} givenToken 
+ * @param {string} username 
+ * @returns {Promise<boolean>}
+ */
 
 async function checkToken(givenToken, username) {
     if (!(givenToken && username)) {

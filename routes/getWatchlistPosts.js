@@ -1,6 +1,13 @@
 const db = require("../conn");
 const _ = require('lodash');
 
+/**
+ * 
+ * @param {object[]} posts 
+ * @param {string} username 
+ * @returns {Promise<object[]>} Array of all posts entered, with attribute 'onWatchlist: true' added to posts on user's watchlist
+ */
+
 async function getWatchlistPosts(posts, username) {
 
     const watchlist = await db.orderedList(`auth/users/${username}/watchlist`, 'timestamp', 'desc');
