@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
 
         res.render('index', { user: await getUserInfo(req.cookies.USERNAME), posts: newPosts });
     } else {
-        res.redirect('/app/login');
+        res.render('landing');
     }
 });
 

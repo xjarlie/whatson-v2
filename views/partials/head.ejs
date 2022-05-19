@@ -61,6 +61,8 @@
 <link rel="apple-touch-startup-image" href="../../public/img/apple-splash-1136-640.jpg"
   media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
 
+
+
 <% if (locals.user) { %>
 <% if (locals.user.experiments.amoled) { %>
   <link rel="stylesheet" href="/public/css/amoled.css" />
@@ -75,8 +77,13 @@
 <% } %>
 <% } %>
 <% } else { %>
+<% if (locals.forceDark) { %>
+  <link rel="stylesheet" href="/public/css/darkmode.css" />
+  <meta name="theme-color" content="#292929" />
+<% } else { %>
 <link rel="stylesheet" href="/public/css/lightmode.css" />
 <meta name="theme-color" content="#ff5722" />
+<% } %>
 <% } %>
 
 

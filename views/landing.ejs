@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head', { forceDark: true }); %>
+
+
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 2rem;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-weight: bold;
+        }
+
+        button {
+            width: 85%;
+            font-weight: 600;
+            padding: 7px !important;
+            height: fit-content !important;
+        }
+
+        .btn-flat {
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="/public/img/icon.png" height="200px"/>
+        <h1>WhatsOn</h1>
+
+        <button type="button" class="btn deep-orange waves-effect waves-light" onclick="redirect('/app/signup')">Create an account</button>
+        <br />
+        <button type="button" class="btn-flat deep-orange-text waves-effect" onclick="redirect('/app/login')">Log In</button>
+
+        <%- include('./partials/foot'); %>
+
+    </div>
+</body>
+</html>
