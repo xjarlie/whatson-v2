@@ -68,6 +68,7 @@ router.post('/requests/send', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
         const { request } = req.body;
+        console.log(request);
         const username = req.cookies.USERNAME;
 
         // Check if already friends
@@ -91,8 +92,11 @@ router.post('/requests/send', async (req, res) => {
         const outgoingResult = await db.set(`auth/users/${username}/outgoingRequests/${request}`, { username: request, timestamp: Date.now() });
 
         // Send notification
-        await sendNotification(request, 'Friend request', `${username} just sent you a friend request.`, '/app/friends');
-
+        try {
+            await sendNotification(request, 'Friend request', `${username} just sent you a friend request.`, '/app/friends');
+        } catch {
+            console.log('notiferror');
+        }
         res.status(201).json({ result, message: 'Friend request sent: ' + request });
         return true;
     } else {
@@ -165,7 +169,29 @@ router.post('/:username/requests/cancel', async (req, res) => {
     } else {
         res.status(401).json({ error: 'Credentials invalid' });
     }
-}); 
+});
+
+router.post('/:username/friends/remove', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+
+        const { username } = req.params;
+        const { friend } = req.body;
+
+        if (username !== req.cookies.USERNAME) {
+            res.status(401).json({ error: 'Credentials incorrect' });
+            return false;
+        }
+
+        const userResult = await db.remove(`auth/users/${username}/friends/${friend}`);
+        const friendResult = await db.remove(`auth/users/${friend}/friends/${username}`); 
+
+        res.status(201).json({ message: 'Removed friend: ' + friend });
+
+    } else {
+        res.status(401).json({ error: 'Credentials invalid' });
+    }
+
+});
 
 router.post('/darkmode', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
@@ -202,6 +228,6 @@ router.post('/experiments/:experiment', async (req, res) => {
     } else {
         res.status(401).json({ error: 'Credentials invalid' })
     }
-})
+});
 
 module.exports = router;

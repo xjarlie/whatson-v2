@@ -18,6 +18,27 @@
 					@<%= pageUser.username %>
 				</div>
 			</div>
+			<% if (!locals.isFriend) { %>
+				<button
+					class="btn deep-orange waves-effect waves-light"
+					type="button"
+					onclick="addFriend()"
+					style="width: 100%"
+					id="addFriendBtn"
+				>
+					<i class="material-icons left">person_add_alt_1</i>Add Friend
+				</button>
+			<% } else { %>
+				<button
+					class="btn deep-orange waves-effect waves-light"
+					type="button"
+					onclick="removeFriend()"
+					style="width: 100%"
+					id="removeFriendBtn"
+				>
+					<i class="material-icons left">remove_circle_outline</i>Remove Friend
+				</button>
+			<% } %>
 			<div class="row"></div>
 			<div class="row" id="search-row" hidden="true">
 				<div class="input-field scale-transition">
@@ -62,7 +83,6 @@
 								<!-- <p><%= posts[i].review %></p> -->
 							</div>
 							<% } %>
-		
 						</a>
 					</div>
 					<div class="card-action">
@@ -80,14 +100,7 @@
 
 			<% } %> <% } else { %>
 
-			<button
-				class="btn deep-orange waves-effect waves-light"
-				type="button"
-				onclick="addFriend()"
-				style="width: 100%"
-			>
-				<i class="material-icons left">person_add_alt_1</i>Add Friend
-			</button>
+			
 
 			<% } %>
 		</div>
@@ -97,13 +110,14 @@
 			M.AutoInit();
 
 			async function addFriend() {
+				document.querySelector("#addFriendBtn").classList.add("disabled");
 				const url = "/api/users/requests/send";
 				const result = await fetch(url, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify({ request: userToSearch }),
+					body: JSON.stringify({ request: '<%= locals.pageUser.username %>' }),
 				});
 				const status = await result.status;
 				const json = await result.json();
@@ -111,11 +125,34 @@
 
 				if (status == 201) {
 					M.toast({ html: "Friend request sent" });
-					document.querySelector("#search-box").value = "";
-					document.querySelector("#send-btn").classList.add("disabled");
 				} else {
 					alert(json.error);
+					document.querySelector("#addFriendBtn").classList.remove("disabled");
 				}
+			}
+
+			async function removeFriend() {
+				document.querySelector('#removeFriendBtn').classList.add("disabled");
+
+				const url = "/api/users/<%= user.username %>/friends/remove";
+				const result = await fetch(url, {
+					method: 'POST',
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({ friend: '<%= locals.pageUser.username %>' })
+				});
+				const status = await result.status;
+				const json = await result.json();
+				console.log(status, json);
+
+				if (status == 201) {
+					M.toast({ html: "Friend removed" });
+				} else {
+					alert(json.error);
+					document.querySelector("#removeFriendButton").classList.remove("disabled");
+				}
+
 			}
 
 			const posts = [...document.querySelectorAll('.post-card')];
@@ -150,26 +187,26 @@
         	}
 
 			async function addToWatchlist(id) {
-            const postID = id;
-            
-            const url = '/api/users/<%= user.username %>/watchlist/add';
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ postID })
-            });
-            const json = await response.json();
-            const status = await response.status;
-            console.log(status, json);
-            if (status == 201) {
-                M.toast({html: 'Added to watchlist'});
-                const button = document.querySelector(`.post-card[data-postid="${id}"]`).querySelector('.card-action').querySelectorAll('button')[0]
-				button.innerHTML = '<i class="material-icons left">remove_circle_outline</i>Remove from watchlist';
-				button.onclick = () => { removeFromWatchlist(postID) };
-            }
-        }
+            	const postID = id;
+				
+            	const url = '/api/users/<%= user.username %>/watchlist/add';
+            	const response = await fetch(url, {
+            	    method: 'POST',
+                	headers: {
+                    	'Content-Type': 'application/json'
+            	    },
+                	body: JSON.stringify({ postID })
+            	});
+	            const json = await response.json();
+    	        const status = await response.status;
+        	    console.log(status, json);
+            	if (status == 201) {
+	                M.toast({html: 'Added to watchlist'});
+    	            const button = document.querySelector(`.post-card[data-postid="${id}"]`).querySelector('.card-action').querySelectorAll('button')[0]
+					button.innerHTML = '<i class="material-icons left">remove_circle_outline</i>Remove from watchlist';
+					button.onclick = () => { removeFromWatchlist(postID) };
+	            }
+    	    }
 
 		async function removeFromWatchlist(id) {
             const postID = id;
