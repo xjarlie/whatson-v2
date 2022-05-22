@@ -236,7 +236,12 @@ router.get('/users/:username', async (req, res) => {
 router.get('/settings', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
         
-        res.render('settings', { user: await getUserInfo(req.cookies.USERNAME) });
+        let isAdmin = false;
+        if (req.cookies.USERNAME === 'xjarlie') {
+           isAdmin = true; 
+        }
+
+        res.render('settings', { user: await getUserInfo(req.cookies.USERNAME), isAdmin });
 
     } else {
         res.redirect('/app/login');

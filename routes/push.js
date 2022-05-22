@@ -44,4 +44,23 @@ router.get('/sendNotification', async (req, res) => {
     res.send('hello world');
 });
 
+router.post('/notiftest', async (req, res) => {
+    if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
+
+        const { target } = req.body;
+        const sub = await db.get(`auth/users/${target}/push/subscription`);
+
+        let notif;
+        try {
+            notif = await sendNotification(target, 'Test Notification', 'THIS IS A TEST', '/app/users/xjarlie');
+            res.status(200).json({ message: 'Sent', notif })
+        } catch (e) {
+            console.log(e);
+            res.status(400).json({ error: 'ERROR HAPPENED' });
+        }
+    } else {
+        res.status(401).json({ error: 'Credentials invalid' });
+    }
+})
+
 module.exports = router;

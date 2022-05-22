@@ -52,6 +52,15 @@
                     </div>
                 <!-- </div> -->
             </div>
+            <% if (locals.isAdmin === true) { %>
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Notif Tester</span>
+                    <input type="text" id="notifTest" placeholder="Enter username" />
+                    <button type="button" class="btn deep-orange" onclick="notifTest()">Go</button>
+                </div>
+            </div> 
+            <% } %>
             <div class="row">
                 <div class="card">
                     <div class="card-content">
@@ -101,6 +110,26 @@
                     } else {
                         alert('Error: ' + json.error);
                     }
+                }
+
+                async function notifTest() {
+
+                    const target = document.querySelector('#notifTest').value.trim().toLowerCase();
+
+                    const url = '/api/push/notiftest';
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ target })
+                    });
+                    const status = response.status;
+                    const json = await response.json();
+
+                    console.log(status, json);
+                    alert(status + ': ' + json);
+
                 }
 
                 async function exlayout() {
@@ -189,6 +218,16 @@
 
                             alert('Notifications enabled');
                         });
+                    }
+                }
+
+                function unsubscribe() {
+                    if ('serviceWorker' in navigator) {
+                        navigator.serviceWorker.ready.then(async (reg) => {
+                            reg.pushManager.getSubscription().then(pushSub => {
+                                pushSub.unsubscribe();
+                            })
+                        })
                     }
                 }
 
