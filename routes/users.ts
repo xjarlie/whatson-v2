@@ -1,8 +1,8 @@
-const express = require('express');
-const sendNotification = require('./sendNotification');
+import express from 'express';
+import sendNotification from './sendNotification';
 const router = express.Router();
-const db = require('../conn');
-const { checkToken } = require("./checkToken");
+import db from '../conn';
+import { checkToken } from "./checkToken";
 
 router.get('/search/:username', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
@@ -230,4 +230,4 @@ router.post('/experiments/:experiment', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

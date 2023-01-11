@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -13,4 +13,4 @@ router.get('/u/:id', (req, res) => {
     res.redirect('/app/users/' + req.params.id);
 });
 
-module.exports = router;
+export default router;

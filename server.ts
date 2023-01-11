@@ -1,15 +1,15 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const compression = require('compression');
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import compression from 'compression';
 
-const indexRouter = require('./routes/index');
-const appRouter = require('./routes/app');
-const authRouter = require('./routes/auth');
-const usersRouter = require('./routes/users');
-const postsRouter = require('./routes/posts');
-const pushRouter = require('./routes/push');
+import indexRouter from './routes/index';
+import appRouter from './routes/app';
+import authRouter from './routes/auth';
+import usersRouter from './routes/users';
+import postsRouter from './routes/posts';
+import pushRouter from './routes/push';
 
 const app = express();
 const port = 3000;

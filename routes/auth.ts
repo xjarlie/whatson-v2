@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const db = require('../conn');
-const crypto = require('crypto');
-const _ = require('lodash');
+import db from '../conn';
+import crypto from 'crypto';
+import _ from 'lodash';
+import { Token, User } from './schema';
 
 const cookieOptions = { secure: true, httpOnly: true, maxAge: 5184000000 };
 
@@ -11,14 +12,14 @@ router.post('/signup', async (req, res) => {
 
     const hashed = hashData(password);
 
-    const usernameCheck = await db.get('auth/users/' + username);
+    const usernameCheck: User = await db.get('auth/users/' + username);
 
     // Email check
-    const users = await db.orderedList('auth/users', 'username', 'asc');
+    const users: User[] = await db.orderedList('auth/users', 'username', 'asc');
     const emailExists = _.filter(users, (o) => {
         return o.email === email;
     });
-    
+
     if (usernameCheck) {
         res.status(422).json({ error: 'Username already in use' });
         return false;
@@ -31,7 +32,7 @@ router.post('/signup', async (req, res) => {
 
     const token = generateAuthToken();
 
-    const data = { username, displayName, email, password: hashed.hash, salt: hashed.salt, token };
+    const data: User = { username, displayName, email, password: hashed.hash, salt: hashed.salt, token };
 
     await db.set('auth/users/' + username, data);
     await db.set('auth/emails/' + hashData(email, ' ').hash, true);
@@ -43,7 +44,7 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    const userData = await db.get('auth/users/' + username);
+    const userData: User = await db.get('auth/users/' + username);
     if (!userData) {
         res.status(404).json({ error: 'Account with that username does not exist' });
         return false;
@@ -63,16 +64,16 @@ router.post('/login', async (req, res) => {
 
 router.post('/')
 
-function hashData(string, salt) {
+function hashData(string: string, salt?: string): { hash: string, salt: string } {
     let salto = salt || crypto.randomBytes(16).toString('hex');
     const hash = crypto.pbkdf2Sync(string, salto, 1000, 64, 'sha512').toString('hex');
     return { hash, salt: salto };
 }
 
-function generateAuthToken(lasts=2592000000 /* 30 days */) {
+function generateAuthToken(lasts = 2592000000 /* 30 days */): Token {
     const tokenData = crypto.randomBytes(64).toString('hex');
     const expires = Date.now() + lasts;
     return { token: tokenData, expires };
 }
 
-module.exports = router;
+export default router;

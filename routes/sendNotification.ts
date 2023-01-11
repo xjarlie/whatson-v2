@@ -1,19 +1,8 @@
-const db = require("../conn");
-const webPush = require('web-push');
-const { publicKey, privateKey } = require('../vapid-keys.json');
+import db from "../conn";
+import webPush from 'web-push';
+import { publicKey, privateKey } from '../vapid-keys.json';
 
-/**
- * 
- * @param {string} username 
- * @param {string} title 
- * @param {string} message 
- * @param {string} url 
- * @param {string} icon 
- * @param {number} ttl 
- * @returns 
- */
-
-async function sendNotification(username, title, message, url='/', icon="/public/img/icon.png", ttl=60) {
+async function sendNotification(username: string, title: string, message: string, url: string='/', icon: string="/public/img/icon.png", ttl: number=60) {
 
     const subscription = await db.get(`auth/users/${username}/push/subscription`);
     if (!subscription) {
@@ -40,4 +29,4 @@ async function sendNotification(username, title, message, url='/', icon="/public
     return notification;
 }
 
-module.exports = sendNotification;
+export default sendNotification;

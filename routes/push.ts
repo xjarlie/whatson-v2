@@ -1,11 +1,12 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
-const db = require('../conn');
-const webPush = require('web-push');
-const { publicKey, privateKey } = require('../vapid-keys.json');
-const { checkToken } = require('./checkToken');
-const sendNotification = require('./sendNotification');
+import db from '../conn';
+import webPush from 'web-push';
+import { publicKey, privateKey } from '../vapid-keys.json';
+import { checkToken } from './checkToken';
+import sendNotification from './sendNotification';
+
 webPush.setVapidDetails(
     'mailto:me@xjarlie.com',
     publicKey,
@@ -22,7 +23,7 @@ router.post('/register', async (req, res) => {
 
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
-        const username = req.cookies.USERNAME;
+        const username: string = req.cookies.USERNAME;
 
         const result = await db.set(`auth/users/${username}/push/subscription`, subscription);
 
@@ -63,4 +64,4 @@ router.post('/notiftest', async (req, res) => {
     }
 })
 
-module.exports = router;
+export default router;

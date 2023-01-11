@@ -1,15 +1,16 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const db = require('../conn');
-const crypto = require('crypto');
-const { checkToken } = require("./checkToken");
-const { getUserPosts } = require('./getUserPosts');
-const sendNotification = require('./sendNotification');
+import db from '../conn';
+import crypto from 'crypto';
+import { checkToken } from "./checkToken";
+import { getUserPosts } from './getUserPosts';
+import sendNotification from './sendNotification';
+import { Post } from './schema';
 
 router.post('/create', async (req, res) => {
-    let data = req.body;
-    const username = req.cookies.USERNAME;
-    const authToken = req.cookies.AUTH_TOKEN;
+    let data: Post = req.body;
+    const username: string = req.cookies.USERNAME;
+    const authToken: string = req.cookies.AUTH_TOKEN;
 
     if (!await checkToken(authToken, username)) {
         res.status(401).json({ error: 'Authentication invalid, please log in again' });
@@ -19,11 +20,11 @@ router.post('/create', async (req, res) => {
     data.author = username;
     data.timestamp = Date.now();
 
-    let key;
+    let key: string = '';
     let exists = true;
     while (exists) {
         key = crypto.randomBytes(8).toString('hex');
-        const check = await db.get('posts/' + key);
+        const check: Post = await db.get('posts/' + key);
         if (!check) break;
     }
 
@@ -53,7 +54,7 @@ router.post('/create', async (req, res) => {
 });
 
 router.post('/update', async (req, res) => {
-    const post = req.body;
+    const post: Post = req.body;
 
     if (!await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
         res.status(401).json({ error: 'Authentication invalid, please log in again' });
@@ -72,7 +73,7 @@ router.post('/update', async (req, res) => {
     }
 
 
-    const prevData = await db.get(`posts/${post.id}`);
+    const prevData: Post = await db.get(`posts/${post.id}`);
     console.log('PREVIOUS:', prevData);
 
     const newData = Object.assign(prevData, post);
@@ -111,4 +112,4 @@ router.post('/delete', async (req, res) => {
     return true;
 });
 
-module.exports = router;
+export default router;
