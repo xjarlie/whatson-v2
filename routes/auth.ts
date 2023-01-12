@@ -1,22 +1,20 @@
-import express from 'express';
+import express, { CookieOptions } from 'express';
 const router = express.Router();
 import db from '../conn';
 import crypto from 'crypto';
 import _ from 'lodash';
 import { Token, User } from './schema';
 
-const cookieOptions = { secure: true, httpOnly: true, maxAge: 5184000000 };
+const cookieOptions: CookieOptions = { secure: true, httpOnly: true, maxAge: 5184000000 };
 
 router.post('/signup', async (req, res) => {
     const { username, email, password, displayName } = req.body;
-
     const hashed = hashData(password);
-
     const usernameCheck: User = await db.get('auth/users/' + username);
 
     // Email check
     const users: User[] = await db.orderedList('auth/users', 'username', 'asc');
-    const emailExists = _.filter(users, (o) => {
+    const emailExists: User[] = _.filter(users, (o) => {
         return o.email === email;
     });
 
