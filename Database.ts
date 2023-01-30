@@ -14,7 +14,7 @@ class Database {
         this.fileExists();
     }
 
-    async fileExists() {
+    async fileExists(): Promise<void> {
         let pathFile = this.filePath;
         fsSync.access(this.filePath, fsSync.constants.R_OK, function (error) {
             if (error) {
@@ -70,8 +70,8 @@ class Database {
         return await fs.writeFile(this.filePath, JSON.stringify(db));
     }
 
-    async push(path: string, value: any, { length=8, includeID=false }) {
-        let key: string | undefined;
+    async push(path: string, value: any, { length=8, includeID=false }): Promise<{ id: string, path: string, result: boolean }> {
+        let key: string = '';
         let exists: boolean = true;
         let fullPath: string = path;
 

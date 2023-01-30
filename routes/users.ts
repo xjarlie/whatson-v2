@@ -3,13 +3,14 @@ import sendNotification from './sendNotification';
 const router = express.Router();
 import db from '../conn';
 import { checkToken } from "./checkToken";
+import { User } from './schema';
 
 router.get('/search/:username', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
         const { username } = req.params;
-        
-        const user = await db.get('auth/users/' + username);
+
+        const user: User = await db.get('auth/users/' + username);
 
         if (user) {
             const cleanedUser = { username: user.username, displayName: user.displayName };
@@ -19,7 +20,6 @@ router.get('/search/:username', async (req, res) => {
             res.status(404).json({ error: 'User not found' });
             return true;
         }
-
 
     } else {
         res.status(401).json({ error: 'Credentials invalid' });
@@ -31,7 +31,7 @@ router.post('/:username/watchlist/add', async (req, res) => {
         const { username } = req.params;
         if (username == req.cookies.USERNAME) {
 
-            const { postID } = req.body;
+            const { postID }: { postID: string } = req.body;
 
             const result = await db.set(`auth/users/${username}/watchlist/${postID}`, { id: postID, timestamp: Date.now() });
 
@@ -50,11 +50,11 @@ router.post('/:username/watchlist/remove', async (req, res) => {
         const { username } = req.params;
         if (username == req.cookies.USERNAME) {
 
-            const { postID } = req.body;
+            const { postID }: { postID: string } = req.body;
 
-            const result = await db.remove(`auth/users/${username}/watchlist/${postID}`);
+            await db.remove(`auth/users/${username}/watchlist/${postID}`);
 
-            res.status(201).json({ result, message: 'Removed from watchlist: ' + postID });
+            res.status(201).json({ message: 'Removed from watchlist: ' + postID });
 
         } else {
             res.status(401).json({ error: 'Credentials incorrect' });
@@ -67,13 +67,13 @@ router.post('/:username/watchlist/remove', async (req, res) => {
 router.post('/requests/send', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
-        const { request } = req.body;
+        const { request }: { request: string } = req.body;
         console.log(request);
-        const username = req.cookies.USERNAME;
+        const username: string = req.cookies.USERNAME;
 
         // Check if already friends
         {
-            const result = await db.get(`auth/users/${username}/friends/${request}`);
+            const result: { username: string, timestamp: number } = await db.get(`auth/users/${username}/friends/${request}`);
             if (result) {
                 res.status(400).json({ error: 'User already in friends list' });
                 return true;
@@ -83,7 +83,7 @@ router.post('/requests/send', async (req, res) => {
         // Check if user is self
         {
             if (request === username) {
-                res.status(400).json({ error: `You can't send a friend request to yourself, silly`});
+                res.status(400).json({ error: `You can't send a friend request to yourself, silly` });
                 return true;
             }
         }
@@ -108,14 +108,14 @@ router.post('/requests/send', async (req, res) => {
 router.post('/:username/requests/add', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
-        const { username } = req.params;
+        const { username }: { username: string } = req.params;
         if (username == req.cookies.USERNAME) {
 
-            const { request } = req.body;
+            const { request }: { request: string } = req.body;
 
             // Remove request
-            const removed = await db.remove(`auth/users/${username}/requests/${request}`);
-            const outgoingRemoved = await db.remove(`auth/users/${request}/outgoingRequests/${username}`);
+            await db.remove(`auth/users/${username}/requests/${request}`);
+            await db.remove(`auth/users/${request}/outgoingRequests/${username}`);
 
             // Add friend
             const result = await db.set(`auth/users/${username}/friends/${request}`, { username: request, timestamp: Date.now() });
@@ -132,15 +132,15 @@ router.post('/:username/requests/add', async (req, res) => {
 
 router.post('/:username/requests/remove', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
-        const { username } = req.params;
+        const { username }: { username: string } = req.params;
         if (username == req.cookies.USERNAME) {
 
-            const { request } = req.body;
+            const { request }: { request: string } = req.body;
 
-            const result = await db.remove(`auth/users/${username}/requests/${request}`);
-            const outgoingResult = await db.remove(`auth/users/${request}/outgoingRequests/${username}`);
+            await db.remove(`auth/users/${username}/requests/${request}`);
+            await db.remove(`auth/users/${request}/outgoingRequests/${username}`);
 
-            res.status(201).json({ result, message: 'Removed request: ' + request });
+            res.status(201).json({ message: 'Removed request: ' + request });
 
         } else {
             res.status(401).json({ error: 'Credentials incorrect' });
@@ -153,15 +153,15 @@ router.post('/:username/requests/remove', async (req, res) => {
 router.post('/:username/requests/cancel', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
-        const { username } = req.params;
+        const { username }: { username: string } = req.params;
         if (username === req.cookies.USERNAME) {
 
-            const { request } = req.body;
+            const { request }: { request: string } = req.body;
 
-            const outgoingResult = await db.remove(`auth/users/${username}/outgoingRequests/${request}`);
-            const result = await db.remove(`auth/users/${request}/requests/${username}`);
+            await db.remove(`auth/users/${username}/outgoingRequests/${request}`);
+            await db.remove(`auth/users/${request}/requests/${username}`);
 
-            res.status(201).json({ result, message: 'Cancelled request: ' + request });
+            res.status(201).json({ message: 'Cancelled request: ' + request });
         } else {
             res.status(401).json({ error: 'Credentials incorrect' });
         }
@@ -175,15 +175,15 @@ router.post('/:username/friends/remove', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
         const { username } = req.params;
-        const { friend } = req.body;
+        const { friend }: { friend: string } = req.body;
 
         if (username !== req.cookies.USERNAME) {
             res.status(401).json({ error: 'Credentials incorrect' });
             return false;
         }
 
-        const userResult = await db.remove(`auth/users/${username}/friends/${friend}`);
-        const friendResult = await db.remove(`auth/users/${friend}/friends/${username}`); 
+        await db.remove(`auth/users/${username}/friends/${friend}`);
+        await db.remove(`auth/users/${friend}/friends/${username}`);
 
         res.status(201).json({ message: 'Removed friend: ' + friend });
 
@@ -196,11 +196,11 @@ router.post('/:username/friends/remove', async (req, res) => {
 router.post('/darkmode', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
 
-        const username = req.cookies.USERNAME;
-        const { darkMode } = req.body;
+        const username: string = req.cookies.USERNAME;
+        const { darkMode }: { darkMode: boolean } = req.body;
 
         const result = await db.set(`auth/users/${username}/darkMode`, darkMode);
-    
+
 
         res.status(200).json({ result, message: 'Dark mode preferences updated' });
     } else {
@@ -210,10 +210,10 @@ router.post('/darkmode', async (req, res) => {
 
 router.post('/experiments/:experiment', async (req, res) => {
     if (await checkToken(req.cookies.AUTH_TOKEN, req.cookies.USERNAME)) {
-        
-        const username = req.cookies.USERNAME;
-        const { enabled } = req.body;
-        const { experiment } = req.params;
+
+        const username: string = req.cookies.USERNAME;
+        const { enabled }: { enabled: boolean } = req.body;
+        const { experiment }: { experiment: string } = req.params;
 
         const experiments = ['layout', 'amoled'];
         if (!experiments.includes(experiment)) {
