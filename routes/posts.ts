@@ -61,7 +61,7 @@ router.post('/update', async (req, res) => {
         return false;
     }
 
-    const userPosts = await getUserPosts([req.cookies.USERNAME]);
+    const userPosts: Post[] = await getUserPosts([req.cookies.USERNAME]);
     const exists = userPosts.filter((o) => {
         if (o.id === post.id) {
             return o;

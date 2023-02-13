@@ -6,10 +6,11 @@ WORKDIR /usr/src/app
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY dist ./
-COPY package*.json ./dist/
-COPY public ./dist/
-COPY views ./dist/
+COPY dist .
+COPY package*.json ./
+COPY public ./public
+COPY views ./views
+COPY db ./db
 
 RUN npm install
 # If you are building your code for production
@@ -21,4 +22,4 @@ RUN npm install
 ENV NODE_ENV=production
 
 EXPOSE 3000
-CMD [ "node", "dist/server.js" ]
+CMD [ "node", "server.js" ]
