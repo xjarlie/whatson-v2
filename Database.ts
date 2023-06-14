@@ -30,7 +30,7 @@ class Database {
 
     pathToArray(path: string): string[] {
         if (path) {
-            let arr = path.split('/');
+            const arr = path.split('/');
         
             return arr.filter(n => n);
         }  else return [''];
@@ -78,7 +78,7 @@ class Database {
         while (exists) {
             key = crypto.randomBytes(length).toString('hex');
 
-            let pathArray = this.pathToArray(path);
+            const pathArray = this.pathToArray(path);
             pathArray.push(key);
             fullPath = this.arrayToPath(pathArray);
 
@@ -103,14 +103,14 @@ class Database {
     async orderedList(path: string, sortBy: string, sortOrder: Many<boolean | 'asc' | 'desc'> = 'asc'): Promise<any[]> {
         let list: object = await this.get(path);
 
-        let sorted: object[] = _.orderBy(list, (o: any) => {
+        const sorted: object[] = _.orderBy(list, (o: any) => {
             return o[sortBy];
         }, sortOrder);
         return sorted;
     }
 
     timestamp(): number {
-        return _.now();
+        return Date.now();
     }
 
     async remove(path: string): Promise<void> {
