@@ -1,0 +1,66 @@
+:root {
+    --color-primary: #FF8B66;
+    --text-primary: white;
+
+    --color-secondary: #FFD1C2;
+    --text-secondary: black;
+
+    --color-bg: #FFD1C2;
+    --color-card-bg: white;
+}
+
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    background-color: var(--color-bg);
+}
+
+.container {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+}
+
+.card {
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+
+    margin: 8px 16px;
+    padding: 8px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.button {
+    border-radius: 8px;
+
+    font-size: 20px;
+    padding: 10px;
+
+    outline: none;
+    border: none;
+}
+
+.primary {
+    background-color: var(--color-primary);
+    color: var(--text-primary);
+}
+
+.secondary {
+    background-color: var(--color-secondary);
+    color: var(--text-secondary);
+}
+
+.form .input-field {
+    display: flex;
+    flex-direction: column;
+}
