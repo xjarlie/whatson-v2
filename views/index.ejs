@@ -2,22 +2,18 @@
 <html lang="en">
 	<head>
 		<%- include('./partials/head'); %>
-		<link rel="stylesheet" href="/public/css/index-new.css" />
+		<link rel="stylesheet" href="/public/css/index.css" />
 	</head>
 
-	<%- include('./partials/nav', { title: 'Home', user: user, search: true }); %>
+	<%- include('./partials/nav', { title: 'Feed', user: user, search: true }); %>
 
-	<div class="fixed-action-btn" id="fab">
-		<a
-			class="btn-floating btn-large deep-orange"
-			href="/app/posts/create?referrer=/"
-			id="fabstyle"
-		>
-			<i class="large material-icons">mode_edit</i>
+	<div class="fab button primary">
+		<a href="/app/posts/create?referrer=/">
+			New post
 		</a>
 	</div>
 
-	<div class="container-fluid">
+	<div class="container">
 
         <div class="row" id="search-row" hidden="true">
         	<div class="input-field scale-transition">
@@ -27,19 +23,19 @@
             </div>
         </div>
 
-		<% for( const i in locals.posts ) { %>
-		<div class="card z-depth-1 post-card" data-postid="<%= posts[i].id %>">
+		<% for ( const i in locals.posts ) { %>
+		<div class="card post-card" data-postid="<%= posts[i].id %>">
 			
-			<div class="card-content waves-effect" href="/app/posts/<%= locals.posts[i].id %>?referrer=/">
-				<a href="/app/posts/<%= locals.posts[i].id %>?referrer=/" style="color: black; font-weight: bold">
+			<div class="card-content" href="/app/posts/<%= locals.posts[i].id %>?referrer=/">
+				<a href="/app/posts/<%= locals.posts[i].id %>?referrer=/">
 
 					<% if (locals.posts[i].people) {  if (locals.posts[i].people.includes(user.username)) { %>
 						<span class="new badge right deep-orange" data-badge-caption="Recommended to you"></span>
 					<% }} %>
-					<p class="deep-orange-text author-p" style="width: fit-content">
+					<p class="deep-orange-text author-p">
 						@<%= posts[i].author %>
 					</p>
-					<span class="card-title" style="font-weight: bold"
+					<span class="card-title"
 						><%= posts[i].title %></span
 					>
 
@@ -49,9 +45,9 @@
 						<% } %>
 					</div>
 
-					<div class="chip deep-orange white-text category-chip"><%= posts[i].category %></div>
+					<div class="chip category"><%= posts[i].category %></div>
 					<% if (posts[i].genre) { %>
-						<div class="chip genre-chip"><%= posts[i].genre %></div>
+						<div class="chip genre"><%= posts[i].genre %></div>
 					<% } %>
 
 					<% if (posts[i].review) { %>

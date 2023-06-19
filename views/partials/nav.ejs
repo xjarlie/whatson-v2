@@ -1,46 +1,36 @@
-<div class="navbar-fixed">
-    <nav class="deep-orange z-depth-<%= locals.user.darkMode? 2 : 1 %>" id="nav"> 
-        <div class="nav-wrapper">
-            <% if (!locals.hideMenu) { %>
-                <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
-            <% } %>
-            <a href="#" class="brand-logo center"><%= title %></a>
-            <% if (locals.showBack) { %>
-                <ul id='nav-mobile' class="left">
-                    <li><a href='#' onclick=<%= locals.customBack ? customBack : 'goBack()' %>><i class="material-icons">arrow_back</i></a></li>
-                </ul>
-            <% } %>
-            <ul id="nav-mobile"class="right">
-                <% if (locals.search) { %>
-                    <li><a onclick="toggleSearch()" class="waves-effect waves-light"><i class="material-icons">search</i></a></li>
-                <% } %>
-                <li><a onclick="refresh()" class="waves-effect waves-light"><i class="material-icons">refresh</i></a></li>
-            </ul>
-        </div>
-        
-    </nav>
+<div class="navbar">
+    <div class="left">
+        <% if (!locals.hideMenu) { %>
+            <button class="nav-button icon">Menu</button>
+        <% } %>
+        <% if (locals.showBack) { %>
+            <button class="nav-button icon" onclick=<%= locals.customBack ? customBack : 'goBack()' %>>Back</button>
+        <% } %>
+    </div>
+    <div class="center">
+        <a href="/app"><%= title %></a>
+    </div>
+    <div class="right">
+        <% if (locals.search) { %>
+            <button onclick="toggleSearch()" class="nav-button icon">Search</a></li>
+        <% } %>
+        <button onclick="refresh()" class="nav-button icon">Refresh</button>
+    </div>
+
+
 </div>
 <% if (!locals.hideMenu) { %>
-    <ul id="slide-out" class="sidenav" id="sidenav">
-        <li><div class="user-view" style="height: 100%;">
-            <div class="background" style="background-color: #ff5722;" id="slide-out-bg">
-                <!-- <img src="/public/img/orange.png" id="sidebar-img" width="100%" height="100%"> -->
-            </div>
-    
-            <a href="/app/users/<%= locals.user.username %>"><span class="white-text name" id="displayname-nav"><%= locals.user.displayName %> </span></a>
-            <a href="/app/users/<%= locals.user.username %>"><span class="white-text email" id="username-nav"><%= locals.user.username %> </span></a>
-        </div></li>
-        <li><a href="/app" class="waves-effect waves-light" ><i class="material-icons  ">home</i>Home</a></li>
-        <li><a href="/app/friends" class="waves-effect waves-light" ><i class="material-icons  " >groups</i>Friends</a></li>
-        <li><a href="/app/watchlist" class="waves-effect waves-light"><i class="material-icons  ">list</i>Watchlist</a></li>
-        <li><a href="/app/users/<%= locals.user.username %>" class="waves-effect waves-light" ><i class="material-icons  " >account_circle</i>Profile</a></li>
-        <li><div class="divider"></div></li>
-        <li><a href="/app/settings" class="waves-effect waves-light"><i class="material-icons  ">settings</i>Settings</a></li>
-        <li><a href="https://github.com/xjarlie/whatson-v2/issues" class="waves-effect waves-light" style="font-weight: bold;" target="__blank"><i class="material-icons  ">bug_report</i>Feedback</a></li>
-        <li><div class="divider"></div></li>
-        <li><a href="" class="subheader">v2.3.1-beta</a></li>
-    </ul>
-    
+    <div class="sidebar">
+        <a href="/app" class="navlink">Feed</a>
+        <a href="/app/friends" class="navlink">Friends</a>
+        <a href="/app/watchlist" class="navlink"></a>
+        <a href="/app/profile" class="navlink bottom profile">
+            <span class="displayName"><%= locals.user.displayName %></span>
+            <span class="username">@<%= locals.user.username %></span>
+        </a>
+        <a href="/app/settings" class="navlink bottom">Settings</a>
+        <span class="version">v2.4</span>
+    </div>
 <% } %>
 
 <br />

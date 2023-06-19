@@ -7,6 +7,7 @@
 
     --color-bg: #FFD1C2;
     --color-card-bg: white;
+
 }
 
 *, *::after, *::before {
@@ -19,8 +20,14 @@ html, body {
     height: 100%;
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 body {
     background-color: var(--color-bg);
+    font-family: 'Work Sans', sans-serif;
 }
 
 .container {
@@ -60,7 +67,55 @@ body {
     color: var(--text-secondary);
 }
 
-.form .input-field {
+.input-field {
     display: flex;
     flex-direction: column;
+}
+
+.input-field input {
+    background-color: rgba(255, 255, 255, 70%);
+    border: none;
+}
+
+
+/* NAVBAR */
+
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: white;
+    position: relative;
+
+}
+
+.nav-button {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.navbar .center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.navbar .center a {
+    text-decoration: none;
+    color: inherit;
+
+    font-weight: 300;
+    font-size: 32px;
+}
+
+
+/* FAB */
+.button.fab {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
 }
