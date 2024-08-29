@@ -1,0 +1,156 @@
+:root {
+    --background-color: #FFD1C2;
+    --primary-color: #FF8B66;
+    --secondary-color: #FFD1C2;
+
+    --card-color: rgba(255,255,255,0.95);
+
+    --text-on-primary: #ffffff;
+    --text-on-secondary: #000000;
+
+    --icon-size: 26px;
+    --icon-thickness: 1px;
+
+}
+
+* {
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+
+    background-color: var(--background-color);
+
+    font-family: 'Work Sans', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 20pt;
+}
+
+.primary {
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+}
+
+.secondary {
+    background-color: var(--secondary-color);
+    color: var(--text-on-secondary);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin: 32px;
+
+    position: relative;
+}
+
+.card {
+    background-color: var(--card-color);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    border-radius: 8px;
+
+
+    width: 100%;
+    max-width: 500px;
+}
+
+.card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
+
+    padding: 8px;
+}
+
+.card-header .card-title {
+
+    color: var(--primary-color);
+
+    font-weight: 600;
+    font-size: 14pt;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+
+    padding: 8px;
+}
+
+.card-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+
+    border-top: 1px solid var(--background-color);
+}
+
+.card-footer .card-action {
+    background-color: transparent;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+
+    padding: 6px;
+    margin: 0 6px;
+
+    font-weight: 300;
+    font-size: 16pt;
+}
+
+.card-footer .card-action.right {
+    justify-self: flex-end;
+}
+
+
+.btn {
+    outline: none;
+    border: none;
+    cursor: pointer;
+
+    margin: 2px;
+    padding: 10px 16px;
+
+    font-weight: 400;
+    font-size: 20pt;
+
+    border-radius: 8px;
+
+    position: relative;
+}
+
+.btn .icon {
+    position: absolute;
+    left: 16px;
+    --icon-size: 30px;
+    --icon-thickness: 1.5px
+}
+
+.icon {
+    aspect-ratio: 1/1;
+    width: var(--icon-size);
+    height: auto;
+    stroke-width: var(--icon-thickness);
+    stroke: currentColor;
+}

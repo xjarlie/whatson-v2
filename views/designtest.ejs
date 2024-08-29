@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/public/css/universal.css" />
+</head>
+<body>
+
+    
+    <div class="container">
+        <button class="btn floating">edit</button>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">
+                    Card title
+                </span>
+            </div>
+            <div class="card-body">
+                <button class="btn primary">Primary button</button>
+                <button class="btn secondary">
+                    <svg class="icon" width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M48 72.0044C48 74.2111 46.2111 76 44.0044 76H36.0044C33.7928 76 32 74.2072 32 71.9956V16.8062C32 14.9897 32.6182 13.2272 33.7531 11.8087L39.2 5C39.6101 4.48733 40.3899 4.48733 40.8 5L46.247 11.8087C47.3818 13.2272 48 14.9897 48 16.8062V72.0044Z" stroke="#C2CCDE" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M32.0078 60H47.999" stroke="#C2CCDE" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Secondary button</button>
+
+                <button class="btn primary">
+                    <core-search
+                        class="icon"
+                        variant="path"
+                        stroke-width="1.7"
+                        color="white"
+                    ></core-search>
+                    Primary with icon
+                </button>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="card-action">Save to watchlist</button>
+                <button type="button" class="card-action right">Share</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://unpkg.com/@glyphs/wc-core" type="module" ></script>
+</body>
+</html>

@@ -27,6 +27,10 @@ app.get('/service-worker.js', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'service-worker.js'));
 });
 
+app.get('/designtest', (req, res) => {
+    res.render('designtest');
+});
+
 app.use('/', indexRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
