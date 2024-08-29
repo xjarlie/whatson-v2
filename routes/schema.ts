@@ -1,6 +1,8 @@
+// Define commonly used data structures with datatypes
+
 interface Token {
-    token: String,
-    expires: Number
+    token: string,
+    expires: number
 }
 
 interface User {

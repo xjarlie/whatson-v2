@@ -4,7 +4,7 @@
   "description": "Nodejs remake of xjarlie/tv-recommend",
   "main": "server.ts",
   "scripts": {
-    "test": "nodemon -e ts,js,ejs,html server.ts",
+    "dev": "nodemon -e ts,js,ejs,html server.ts",
     "build": "npm run ts-build && npm run docker-build",
     "ts-build": "npx tsc",
     "docker-build": "docker build . -t xjarlie/whatson:beta-ts && docker push xjarlie/whatson:beta-ts",
